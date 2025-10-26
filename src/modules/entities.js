@@ -1,4 +1,3 @@
-// Eventually, other entities can extend this as a baseline
 class Entity {
     constructor(x, y, v = {x:0, y:0}) {
         this.x = x;
