@@ -1,4 +1,4 @@
-import Theatre from '/src/Theatre.js';
+import Theatre from './src/Theatre.js';
 
 const canvasElement = document.getElementById("theatre");
 const theatre = new Theatre(canvasElement, 800, 800);
