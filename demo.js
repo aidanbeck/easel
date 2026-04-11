@@ -8,7 +8,7 @@ theatre.makeFullScreen();
 theatre.shorterDimensionConsistent = true;
 theatre.redraw = redraw;
 theatre.canvas.style.backgroundColor = "#f8f9fa";
-theatre.ctx.imaeSmoothingEnables = false; //prevent image blurring
+theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
 
 theatre.addEventListener("mousemove", onMouseMove);
 theatre.addEventListener("click", onClick);
