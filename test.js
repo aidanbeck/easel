@@ -30,7 +30,8 @@ function addObject(event) {
         x: x,
         y: y,
         r: 10,
-        v: new Velocity(Math.random() * 10 - 5, Math.random() * 10 - 5)
+        //v: new Velocity(Math.random() * 10 - 5, Math.random() * 10 - 5)
+        v: new Velocity(2, 2)
     }
     
     objects.push(circle);
