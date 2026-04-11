@@ -23,4 +23,10 @@ export default class Velocity {
         let hypotenuseLength = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
         return hypotenuseLength;
     }
+
+    // - - - - -
+
+    applyGravity(gravity) {
+        this.y += gravity; // +y is down
+    }
 }
