@@ -30,7 +30,7 @@ function addObject(event) {
         x: x,
         y: y,
         r: 10,
-        v: new Velocity()
+        v: new Velocity(Math.random() * 10 - 5, Math.random() * 10 - 5)
     }
     
     objects.push(circle);
@@ -40,7 +40,7 @@ function addObject(event) {
 function renderObjects() {
     
     // clear canvas (transparent, for velocity effect)
-    ctx.fillStyle = 'rgb(255,255,255,0.1)';
+    ctx.fillStyle = 'rgb(255,255,255,0.3)';
     ctx.fillRect(-theatre.canvas.width/2, -theatre.canvas.height/2, theatre.canvas.width, theatre.canvas.height);
 
     for (let object of objects) {
@@ -53,6 +53,10 @@ function renderObjects() {
 }
 
 function physics() {
+
+    for (let object of objects) {
+        object.v.moveObject(object);
+    }
 
     renderObjects();
 }
