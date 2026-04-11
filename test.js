@@ -30,8 +30,8 @@ function addObject(event) {
         x: x,
         y: y,
         r: 10,
-        v: new Velocity(Math.random() * 10 - 5, Math.random() * 20 - 20)
-        //v: new Velocity(2, 2)
+        //v: new Velocity(Math.random() * 10 - 5, Math.random() * 20 - 20) // upward bias
+        v: new Velocity(Math.random() * 30 - 15, Math.random() * 30 - 15) // upward bias
     }
     
     objects.push(circle);
@@ -57,12 +57,14 @@ function physics() {
 
     for (let object of objects) {
         object.v.moveObject(object);
-        object.v.applyGravity(1);
+        object.v.applyFriction(0.9);
 
-        if (object.y > theatre.canvas.height / 2) {
-            object.v.y = -object.v.y * 0.4;
-            object.y = theatre.canvas.height / 2 - object.r;
-        }
+        // gravity & bouncing
+        // object.v.applyGravity(1);
+        // if (object.y > theatre.canvas.height / 2) {
+        //     object.v.y = -object.v.y * 0.4;
+        //     object.y = theatre.canvas.height / 2 - object.r;
+        // }
     }
 
     renderObjects();

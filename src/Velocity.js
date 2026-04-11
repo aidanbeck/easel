@@ -24,7 +24,17 @@ export default class Velocity {
         return hypotenuseLength;
     }
 
+    clamp(minimum = 0.01, maximum = 1000) {
+        if (Math.abs(this.x) < minimum) { this.x = 0; }
+        if (Math.abs(Math.abs(this.y)) > minimum) { this.y = 0; }
+    }
+
     // - - - - -
+
+    applyFriction(friction) {
+        this.x *= friction;
+        this.y *= friction;
+    }
 
     applyGravity(gravity) {
         this.y += gravity; // +y is down
