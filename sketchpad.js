@@ -12,9 +12,9 @@ const ctx = theatre.ctx;
 theatre.origin = "CENTER";
 theatre.makeFullScreen();
 theatre.shorterDimensionConsistent = true;
-theatre.redraw = redrawLines;
 theatre.canvas.style.backgroundColor = "#f8f9fa";
 theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
+theatre.redraw = redrawLines;
 
 // Interaction
 theatre.addEventListener("pointerdown", () => {mouseDown = true});
