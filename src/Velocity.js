@@ -32,7 +32,7 @@ export default class Velocity {
 
     clamp(minimum = 0.01) {
         if (Math.abs(this.x) < minimum) { this.x = 0; }
-        if (Math.abs(Math.abs(this.y)) > minimum) { this.y = 0; }
+        if (Math.abs(Math.abs(this.y)) < minimum) { this.y = 0; }
     }
 
     invert() {
