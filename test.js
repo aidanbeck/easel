@@ -1,6 +1,6 @@
 /*
-    This is a simple program to showcase the power of the Velocity module.
-    It is a simple physics simulation written in about 70 lines.
+    This is a simple program to showcase the power of the Overlap module.
+    It is a simple shape drawing program.
 */
 
 import Theatre from './src/Theatre.js';
@@ -24,16 +24,13 @@ const shapes = [];
 
 // Interaction
 theatre.addEventListener("pointerdown", mouseDown);
-theatre.addEventListener("pointerup", mouseUp);
 theatre.addEventListener("pointermove", mouseMove);
+theatre.addEventListener("pointerup", mouseUp);
 theatre.addEventListener("contextmenu", (e) => e.preventDefault());
 
 function mouseDown(event) {
 
-    event.preventDefault(); // prevent context menu
-
     let {x, y} = theatre.getEventCoordinates(event);
-
 
     for (let i = shapes.length - 1; i >= 0; i--) {
         const mousePoint = new Point(x, y);
@@ -53,10 +50,40 @@ function mouseDown(event) {
     }
 }
 
-function mouseUp(event) {
+function mouseMove(event) {
+
     let {x, y} = theatre.getEventCoordinates(event);
 
-    if (drawingShape != null) {
+    selectedShape && moveSelectedShape(x, y);
+    drawingShape && moveDrawingShape(x, y);
+}
+
+function moveSelectedShape(x, y) {
+    selectedShape.x = x;
+    selectedShape.y = y;
+
+    // center rectangle
+    if (selectedShape instanceof Rectangle) {
+        selectedShape.x -= selectedShape.w / 2;
+        selectedShape.y -= selectedShape.h / 2;
+    }
+}
+
+function moveDrawingShape(x, y) {
+    
+    if (drawingShape instanceof Circle) {
+        drawingShape.r = drawingShape.distance(drawingShape, {x: x, y: y});
+    }
+
+    if (drawingShape instanceof Rectangle) {
+        drawingShape.w = x - drawingShape.x;
+        drawingShape.h = y - drawingShape.y;
+    }
+}
+
+function mouseUp(event) {
+
+    if (drawingShape) {
         if (drawingShape instanceof Rectangle) {
             drawingShape.normalizeDimensions();
         }
@@ -67,45 +94,14 @@ function mouseUp(event) {
     drawingShape = null;
 }
 
-function mouseMove(event) {
-
-    let {x, y} = theatre.getEventCoordinates(event);
-
-    if (selectedShape != null) {
-        selectedShape.x = x;
-        selectedShape.y = y;
-
-        if (selectedShape instanceof Rectangle) {
-            selectedShape.x -= selectedShape.w / 2;
-            selectedShape.y -= selectedShape.h / 2;
-        }
-    }
-
-    if (drawingShape != null) {
-        const mousePoint = new Point(x, y);
-        
-        if (drawingShape instanceof Circle) {
-            drawingShape.r = drawingShape.distance(drawingShape, mousePoint);
-        }
-
-        if (drawingShape instanceof Rectangle) {
-            drawingShape.w = mousePoint.x - drawingShape.x;
-            drawingShape.h = mousePoint.y - drawingShape.y;
-        }
-    }    
-}
-
 function renderShapes() {
     
-    // clear canvas
-    ctx.fillStyle = 'white';
-    ctx.fillRect(-theatre.canvas.width/2, -theatre.canvas.height/2, theatre.canvas.width, theatre.canvas.height);
+    ctx.clearRect(-theatre.canvas.width/2, -theatre.canvas.height/2, theatre.canvas.width, theatre.canvas.height);
         
     for (let i = 0; i < shapes.length; i++) {
 
         // color if colliding
         ctx.fillStyle = `darkblue`;
-
         for (let otherShape of shapes) {
             if (shapes[i] == otherShape) { continue; }
             if (shapes[i].overlaps(otherShape)) { ctx.fillStyle = `crimson`; }
@@ -115,8 +111,7 @@ function renderShapes() {
         drawShape(shapes[i], false);
     }
 
-    drawingShape != null && drawShape(drawingShape, false);
-    
+    drawingShape && drawShape(drawingShape, false);
 }
 
 function drawShape(shape, fill = true) {
