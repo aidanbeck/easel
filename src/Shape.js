@@ -91,8 +91,12 @@ class Shape {
         }
 
         // corner testing
-        // TODO
+        if (this.pointCircleOverlap(rectangle, circle)) { return true; } // top left corner
+        if (this.pointCircleOverlap({x: rectangle.x + rectangle.w, y: rectangle.y}, circle)) { return true; } // top right corner
+        if (this.pointCircleOverlap({x: rectangle.x, y: rectangle.y + rectangle.h}, circle)) { return true; } // bottom left corner
+        if (this.pointCircleOverlap({x: rectangle.x + rectangle.w, y: rectangle.y + rectangle.h}, circle)) { return true; } // bottom left corner
 
+        return false;
     }
 
     distance(pointA, pointB) {
