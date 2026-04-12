@@ -25,19 +25,19 @@ class Shape {
     rectanglesOverlap(rectangleA, rectangleB) {
         
         // this could be done beforehand? could it be unneeded>?
-        let leftRectangle;
-        let rightRectangle;
-        let topRectangle;
-        let bottomRectangle;
+        let leftRectangle = rectangleA;
+        let rightRectangle = rectangleB;
+        let topRectangle = rectangleA;
+        let bottomRectangle = rectangleB;
 
-        if (rectangleA.x < rectangleB.x) {
-            leftRectangle = rectangleA;
-            rightRectangle = rectangleB;
+        if (rectangleA.x > rectangleB.x) {
+            leftRectangle = rectangleB;
+            rightRectangle = rectangleA;
         }
 
-        if (rectangleA.y < rectangleB.y) {
-            topRectangle = rectangleA;
-            bottomRectangle = rectangleB;
+        if (rectangleA.y > rectangleB.y) {
+            topRectangle = rectangleB;
+            bottomRectangle = rectangleA;
         }
 
         const horizontalOverlap = leftRectangle.x + leftRectangle.w >= rightRectangle.x;
@@ -111,7 +111,7 @@ class Rectangle extends Shape {
     overlaps(otherShape) {
         if (otherShape instanceof Point) { return this.pointRectangleOverlap(otherShape, this); }
         if (otherShape instanceof Circle) { return this.circleRectangleOverlap(otherShape, this); }
-        if (otherShape instanceof Rectangle) { return this.circleRectangleOverlap(otherShape, this); }
+        if (otherShape instanceof Rectangle) { return this.rectanglesOverlap(this, otherShape); }
     }
 }
 
