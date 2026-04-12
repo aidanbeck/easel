@@ -34,15 +34,16 @@ function mouseDown(event) {
 
     let {x, y} = theatre.getEventCoordinates(event);
 
-    for (let shape of shapes) {
+
+    for (let i = shapes.length - 1; i >= 0; i--) {
         const mousePoint = new Point(x, y);
-        if (mousePoint.overlaps(shape)) {
-            selectedShape = shape;
-            
+        if (mousePoint.overlaps(shapes[i])) {
+            selectedShape = shapes[i];
+            shapes.push(selectedShape); // move to top of stack when selected
+            mouseMove(event);
+            return;
         }
     }
-    mouseMove(event);
-    if (selectedShape != null) { return; }
 
     // if not selecting a shape
     if (event.button === 0) { // left click
@@ -91,11 +92,7 @@ function mouseMove(event) {
             drawingShape.w = mousePoint.x - drawingShape.x;
             drawingShape.h = mousePoint.y - drawingShape.y;
         }
-        
-    }
-
-    
-    
+    }    
 }
 
 function renderShapes() {
@@ -104,16 +101,18 @@ function renderShapes() {
     ctx.fillStyle = 'white';
     ctx.fillRect(-theatre.canvas.width/2, -theatre.canvas.height/2, theatre.canvas.width, theatre.canvas.height);
         
-    for (let shape of shapes) {
+    for (let i = 0; i < shapes.length; i++) {
 
         // color if colliding
-        ctx.fillStyle = "darkblue";
+        ctx.fillStyle = `darkblue`;
+
         for (let otherShape of shapes) {
-            if (shape == otherShape) { continue; }
-            if (shape.overlaps(otherShape)) { ctx.fillStyle = "crimson"; }
+            if (shapes[i] == otherShape) { continue; }
+            if (shapes[i].overlaps(otherShape)) { ctx.fillStyle = `crimson`; }
         }
 
-        drawShape(shape);
+        drawShape(shapes[i]);
+        drawShape(shapes[i], false);
     }
 
     drawingShape != null && drawShape(drawingShape, false);
