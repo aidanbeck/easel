@@ -4,7 +4,6 @@
 */
 
 import Theatre from './src/Theatre.js';
-import Velocity from './src/Velocity.js';
 import { Point, Circle, Rectangle } from './src/Shape.js';
 
 // Theatre Setup
@@ -39,10 +38,11 @@ function mouseDown(event) {
         const mousePoint = new Point(x, y);
         if (mousePoint.overlaps(shape)) {
             selectedShape = shape;
-            mouseMove(event);
-            return;
+            
         }
     }
+    mouseMove(event);
+    if (selectedShape != null) { return; }
 
     // if not selecting a shape
     if (event.button === 0) { // left click
