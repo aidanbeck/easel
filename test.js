@@ -16,10 +16,11 @@ theatre.makeFullScreen();
 theatre.shorterDimensionConsistent = true;
 theatre.canvas.style.backgroundColor = "rgb(255, 255, 255)";
 theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
-theatre.redraw = renderObjects;
+theatre.redraw = renderShapes;
 
 // State
 let selectedShape = null;
+let drawingShape = null;
 const shapes = [];
 
 // Interaction
@@ -32,19 +33,48 @@ function mouseDown(event) {
     let {x, y} = theatre.getEventCoordinates(event);
 
     for (let shape of shapes) {
-        let mousePoint = new Point(x, y);
+        const mousePoint = new Point(x, y);
         if (mousePoint.overlaps(shape)) {
             selectedShape = shape;
+            mouseMove(event);
             return;
         }
     }
 
-    shapes.push(new Circle(x, y, 20));
+    // if not selecting a shape
+    drawingShape = new Circle(x, y, 0);
+
+    
 }
 
-function mouseUp() {}
+function mouseUp(event) {
+    let {x, y} = theatre.getEventCoordinates(event);
 
-function mouseMove() {}
+    if (drawingShape != null) {
+        shapes.push(drawingShape);
+    }
+
+    selectedShape = null;
+    drawingShape = null;
+}
+
+function mouseMove(event) {
+
+    let {x, y} = theatre.getEventCoordinates(event);
+
+    if (selectedShape != null) {
+        selectedShape.x = x;
+        selectedShape.y = y;
+    }
+
+    if (drawingShape != null) {
+        const mousePoint = new Point(x, y);
+        drawingShape.r = drawingShape.distance(drawingShape, mousePoint);
+    }
+
+    
+    
+}
 
 function renderShapes() {
     
@@ -52,13 +82,33 @@ function renderShapes() {
     ctx.fillStyle = 'white';
     ctx.fillRect(-theatre.canvas.width/2, -theatre.canvas.height/2, theatre.canvas.width, theatre.canvas.height);
     
+
     // draw circles
-    ctx.fillStyle = "darkblue";
+    
     for (let shape of shapes) {
+
+        ctx.fillStyle = "darkblue";
+        ctx.strokeStyle = "black";
+
+        // color if colliding
+        for (let otherShape of shapes) {
+            if (shape == otherShape) { continue; }
+            if (shape.overlaps(otherShape)) { ctx.fillStyle = "crimson"; }
+        }
+
+
         ctx.beginPath();
         ctx.arc(shape.x, shape.y, shape.r, 0, Math.PI * 2); 
         ctx.fill();
     }
+
+    // drawingShape
+    if (drawingShape != null) {
+        ctx.beginPath();
+        ctx.arc(drawingShape.x, drawingShape.y, drawingShape.r, 0, Math.PI * 2); 
+        ctx.stroke();
+    }
+    
 }
 
 setInterval(renderShapes, 20);
