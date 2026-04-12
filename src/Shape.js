@@ -95,6 +95,19 @@ class Rectangle extends Shape {
         this.w = w;
         this.h = h;
     }
+
+    // prevent dimensions from being negative by moving x,y to the top left corner.
+    normalizeDimensions() {
+        if (this.w < 0) {
+            this.x += this.w;
+            this.w = -this.w;
+        }
+        if (this.h < 0) {
+            this.y += this.h;
+            this.h = -this.h;
+        }
+    }
+
     overlaps(otherShape) {
         if (otherShape instanceof Point) { return this.pointRectangleOverlap(otherShape, this); }
         if (otherShape instanceof Circle) { return this.circleRectangleOverlap(otherShape, this); }
