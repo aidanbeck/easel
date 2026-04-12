@@ -55,7 +55,44 @@ class Shape {
     }
 
     circleRectangleOverlap(circle, rectangle) {
+        
+        const pointHorizontalOverlap = circle.x >= rectangle.x && circle.x <= rectangle.x + rectangle.w;
+        const pointVerticalOverlap = circle.y >= rectangle.y && circle.y <= rectangle.y + rectangle.h;
+
+        // circle center inside rectangle
+        if (pointHorizontalOverlap && pointVerticalOverlap) { return true; }
+
+        // circle above/below
+        if (pointHorizontalOverlap) {
+            if (circle.y < rectangle.y) {
+                if (circle.y + circle.r > rectangle.y) {
+                    return true;
+                }
+            }
+            if (circle.y > rectangle.y) {
+                if (circle.y - circle.r < rectangle.y + rectangle.h) {
+                    return true;
+                }
+            }
+        }
+
+        // circle left/right
+        if (pointVerticalOverlap) {
+            if (circle.x < rectangle.x) {
+                if (circle.x + circle.r > rectangle.x) {
+                    return true;
+                }
+            }
+            if (circle.x > rectangle.x) {
+                if (circle.x - circle.r < rectangle.x + rectangle.w) {
+                    return true;
+                }
+            }
+        }
+
+        // corner testing
         // TODO
+
     }
 
     distance(pointA, pointB) {
