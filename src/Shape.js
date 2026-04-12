@@ -18,7 +18,7 @@ class Shape {
     }
 
     pointCircleOverlap(point, circle) {
-        const distanceBetween = this.distance(point, circle) - circle.r;
+        const distance = this.distance(point, circle);
         return distance <= circle.r;
     }
 
@@ -76,7 +76,7 @@ class Point extends Shape {
     }
 }
 
-export default class Circle extends Shape {
+class Circle extends Shape {
     constructor(x, y, r) {
         super(x, y);
         this.r = r;
@@ -101,3 +101,5 @@ class Rectangle extends Shape {
         if (otherShape instanceof Rectangle) { return this.circleRectangleOverlap(otherShape, this); }
     }
 }
+
+export { Point, Circle, Rectangle };
