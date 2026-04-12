@@ -9,22 +9,6 @@ export default class Velocity {
         object.y += this.y;
     }
 
-    pointTowards(object, point) {
-        
-        // dependent on non-existing functions
-
-        const magnitude = this.getMagnitude();
-        const width = Math.abs(object.x - point.x);
-        const height = Math.abs(object.y - point.y);
-
-        this.x = width;
-        this.y = height;
-
-        this.normalize();
-        this.setMagnitude(magnitude);
-
-    }
-
     addVelocity(velocity) {
         this.x += velocity.x;
         this.y += velocity.y;
@@ -45,12 +29,30 @@ export default class Velocity {
         return hypotenuseLength;
     }
 
-    setMagnitude(magnitude) {}
+    setMagnitude(magnitude) {
+        this.x *= magnitude;
+        this.y *= magnitude;
+    }
 
-    normalize() {}
+    normalize() {
+        const magnitude = this.getMagnitude();
+        this.x /= magnitude;
+        this.y /= magnitude;
+    }
 
+    pointTowards(object, point) {
+        
+        const magnitude = this.getMagnitude();
+        const width = object.x - point.x;
+        const height = object.y - point.y;
 
-    
+        this.x = width;
+        this.y = height;
+
+        this.normalize();
+        this.setMagnitude(magnitude);
+        this.invert();
+    }
 
     // Non Primitives
 

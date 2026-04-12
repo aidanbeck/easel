@@ -31,7 +31,8 @@ function addObject(event) {
         y: y,
         r: 10,
         //v: new Velocity(Math.random() * 10 - 5, Math.random() * 20 - 20) // upward bias
-        v: new Velocity(Math.random() * 30 - 15, Math.random() * 30 - 15) // upward bias
+        //v: new Velocity(Math.random() * 10 - 5, Math.random() * 10 - 5) // upward bias
+        v: new Velocity(0,0)
     }
     
     objects.push(circle);
@@ -41,7 +42,7 @@ function addObject(event) {
 function renderObjects() {
     
     // clear canvas (transparent, for velocity effect)
-    ctx.fillStyle = 'rgb(255,255,255,0.3)';
+    ctx.fillStyle = 'rgb(255,255,255,0.4)';
     ctx.fillRect(-theatre.canvas.width/2, -theatre.canvas.height/2, theatre.canvas.width, theatre.canvas.height);
 
     for (let object of objects) {
@@ -57,9 +58,19 @@ function physics() {
 
     for (let object of objects) {
         object.v.moveObject(object);
-        object.v.applyFriction(0.9);
+        
+        object.v.applyFriction(0.999);
 
-        // gravity & bouncing
+        // relative gravity
+        for (let object2 of objects) {
+            if (object == object2) { continue; }
+            const towardCenter = new Velocity(1, 0);
+            towardCenter.pointTowards(object, object2);
+            towardCenter.setMagnitude(0.1);
+            object.v.addVelocity(towardCenter);
+        }     
+
+        // vertical gravity & bouncing
         // object.v.applyGravity(1);
         // if (object.y > theatre.canvas.height / 2) {
         //     object.v.y = -object.v.y * 0.4;
