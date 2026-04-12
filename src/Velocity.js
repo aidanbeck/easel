@@ -14,19 +14,9 @@ export default class Velocity {
         this.y += velocity.y;
     }
 
-    clamp(minimum = 0.01, maximum = 1000) {
-        if (Math.abs(this.x) < minimum) { this.x = 0; }
-        if (Math.abs(Math.abs(this.y)) > minimum) { this.y = 0; }
-    }
-
-    invert() {
-        this.x = -this.x;
-        this.y = -this.y;
-    }
-
     getMagnitude() {
-        let hypotenuseLength = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
-        return hypotenuseLength;
+        // a² + b² = c²
+        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }
 
     setMagnitude(magnitude) {
@@ -38,6 +28,20 @@ export default class Velocity {
         const magnitude = this.getMagnitude();
         this.x /= magnitude;
         this.y /= magnitude;
+    }
+
+    clamp(minimum = 0.01) {
+        if (Math.abs(this.x) < minimum) { this.x = 0; }
+        if (Math.abs(Math.abs(this.y)) > minimum) { this.y = 0; }
+    }
+
+    invert() {
+        this.x = -this.x;
+        this.y = -this.y;
+    }
+
+    rotate(degrees) {
+        // TODO
     }
 
     pointTowards(object, point) {
@@ -53,8 +57,6 @@ export default class Velocity {
         this.setMagnitude(magnitude);
         this.invert();
     }
-
-    // Non Primitives
 
     applyFriction(friction) {
         this.x *= friction;
