@@ -27,8 +27,11 @@ const shapes = [];
 theatre.addEventListener("pointerdown", mouseDown);
 theatre.addEventListener("pointerup", mouseUp);
 theatre.addEventListener("pointermove", mouseMove);
+theatre.addEventListener("contextmenu", (e) => e.preventDefault());
 
 function mouseDown(event) {
+
+    event.preventDefault(); // prevent context menu
 
     let {x, y} = theatre.getEventCoordinates(event);
 
@@ -42,14 +45,11 @@ function mouseDown(event) {
     }
 
     // if not selecting a shape
-    if (shapes[shapes.length - 1] instanceof Circle) {
-        drawingShape = new Rectangle(x, y, 0, 0);
+    if (event.button === 0) { // left click
+      drawingShape = new Rectangle(x, y, 0, 0);
     } else {
         drawingShape = new Circle(x, y, 0);
     }
-    
-
-    
 }
 
 function mouseUp(event) {
@@ -103,47 +103,34 @@ function renderShapes() {
     // clear canvas
     ctx.fillStyle = 'white';
     ctx.fillRect(-theatre.canvas.width/2, -theatre.canvas.height/2, theatre.canvas.width, theatre.canvas.height);
-    
-
-    // draw circles
-    
+        
     for (let shape of shapes) {
 
-        ctx.fillStyle = "darkblue";
-        ctx.strokeStyle = "black";
-
         // color if colliding
+        ctx.fillStyle = "darkblue";
         for (let otherShape of shapes) {
             if (shape == otherShape) { continue; }
             if (shape.overlaps(otherShape)) { ctx.fillStyle = "crimson"; }
         }
 
-    
-        ctx.beginPath();
-
-        if (shape instanceof Circle) {
-            ctx.arc(shape.x, shape.y, shape.r, 0, Math.PI * 2); 
-            ctx.fill();
-        }
-        if (shape instanceof Rectangle) {
-            ctx.fillRect(shape.x, shape.y, shape.w, shape.h); 
-        }
-
-        
+        drawShape(shape);
     }
 
-    // drawingShape
-    if (drawingShape != null) {
-        ctx.beginPath();
-        if (drawingShape instanceof Circle) {
-            ctx.arc(drawingShape.x, drawingShape.y, drawingShape.r, 0, Math.PI * 2); 
-            ctx.stroke();
-        }
-        if (drawingShape instanceof Rectangle) {
-            ctx.strokeRect(drawingShape.x, drawingShape.y, drawingShape.w, drawingShape.h); 
-        }
-    }
+    drawingShape != null && drawShape(drawingShape, false);
     
+}
+
+function drawShape(shape, fill = true) {
+    ctx.beginPath();
+    if (shape instanceof Circle) {
+        ctx.arc(shape.x, shape.y, shape.r, 0, Math.PI * 2);
+        fill && ctx.fill();
+        !fill && ctx.stroke();
+    }
+    if (shape instanceof Rectangle) {
+        fill && ctx.fillRect(shape.x, shape.y, shape.w, shape.h);
+        !fill && ctx.strokeRect(shape.x, shape.y, shape.w, shape.h); 
+    }
 }
 
 setInterval(renderShapes, 20);
