@@ -1,6 +1,6 @@
 /*
-    This is a simple program to showcase the power of the Overlap module.
-    It is a simple shape drawing program.
+    This is a simple program to showcase the power of the Shape module.
+    It is a simple drag & drop layout editor with overlap detection in 130 lines.
 */
 
 import Theatre from './src/Theatre.js';
@@ -17,36 +17,38 @@ theatre.canvas.style.backgroundColor = "rgb(255, 255, 255)";
 theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
 theatre.redraw = renderShapes;
 
-// State
-let selectedShape = null;
-let drawingShape = null;
-const shapes = [];
-
 // Interaction
 theatre.addEventListener("pointerdown", mouseDown);
 theatre.addEventListener("pointermove", mouseMove);
 theatre.addEventListener("pointerup", mouseUp);
 theatre.addEventListener("contextmenu", (e) => e.preventDefault());
 
+// State
+let selectedShape = null;
+let tracedShape = null;
+const shapes = [];
+
 function mouseDown(event) {
 
     let {x, y} = theatre.getEventCoordinates(event);
 
-    for (let i = shapes.length - 1; i >= 0; i--) {
-        const mousePoint = new Point(x, y);
-        if (mousePoint.overlaps(shapes[i])) {
-            selectedShape = shapes[i];
-            shapes.push(selectedShape); // move to top of stack when selected
-            mouseMove(event);
-            return;
-        }
+    // Select Shape
+    const mousePoint = new Point(x, y);
+    for (let shape of shapes) {
+        if (shape.overlaps(mousePoint)) { selectedShape = shape; }
     }
 
-    // if not selecting a shape
+    if (selectedShape) { 
+        shapes.push(selectedShape); // move to top
+        mouseMove(event); // move shape to mouse
+        return;
+    }
+
+    // Create New Shape
     if (event.button === 0) { // left click
-      drawingShape = new Rectangle(x, y, 0, 0);
-    } else {
-        drawingShape = new Circle(x, y, 0);
+        tracedShape = new Rectangle(x, y, 0, 0);
+    } else { // right click;
+        tracedShape = new Circle(x, y, 0);
     }
 }
 
@@ -55,63 +57,59 @@ function mouseMove(event) {
     let {x, y} = theatre.getEventCoordinates(event);
 
     selectedShape && moveSelectedShape(x, y);
-    drawingShape && moveDrawingShape(x, y);
+    tracedShape && moveTracedShape(x, y);
+}
+
+function mouseUp() {
+
+    if (tracedShape instanceof Rectangle) { tracedShape.normalizeDimensions(); }
+    tracedShape && shapes.push(tracedShape);
+
+    tracedShape = null;
+    selectedShape = null;
 }
 
 function moveSelectedShape(x, y) {
     selectedShape.x = x;
     selectedShape.y = y;
 
-    // center rectangle
+    // Center Rectangle Around XY
     if (selectedShape instanceof Rectangle) {
         selectedShape.x -= selectedShape.w / 2;
         selectedShape.y -= selectedShape.h / 2;
     }
 }
 
-function moveDrawingShape(x, y) {
+function moveTracedShape(x, y) {
     
-    if (drawingShape instanceof Circle) {
-        drawingShape.r = drawingShape.distance(drawingShape, {x: x, y: y});
+    if (tracedShape instanceof Circle) {
+        tracedShape.r = tracedShape.distance(tracedShape, {x: x, y: y});
     }
 
-    if (drawingShape instanceof Rectangle) {
-        drawingShape.w = x - drawingShape.x;
-        drawingShape.h = y - drawingShape.y;
+    if (tracedShape instanceof Rectangle) {
+        tracedShape.w = x - tracedShape.x;
+        tracedShape.h = y - tracedShape.y;
     }
-}
-
-function mouseUp(event) {
-
-    if (drawingShape) {
-        if (drawingShape instanceof Rectangle) {
-            drawingShape.normalizeDimensions();
-        }
-        shapes.push(drawingShape);
-    }
-
-    selectedShape = null;
-    drawingShape = null;
 }
 
 function renderShapes() {
     
     ctx.clearRect(-theatre.canvas.width/2, -theatre.canvas.height/2, theatre.canvas.width, theatre.canvas.height);
         
-    for (let i = 0; i < shapes.length; i++) {
+    for (let shape of shapes) {
 
-        // color if colliding
         ctx.fillStyle = `darkblue`;
+        
+        // color if colliding
         for (let otherShape of shapes) {
-            if (shapes[i] == otherShape) { continue; }
-            if (shapes[i].overlaps(otherShape)) { ctx.fillStyle = `crimson`; }
+            if (shape.overlaps(otherShape)) { ctx.fillStyle = `crimson`; }
         }
 
-        drawShape(shapes[i]);
-        drawShape(shapes[i], false);
+        drawShape(shape, true);
+        drawShape(shape, false);
     }
 
-    drawingShape && drawShape(drawingShape, false);
+    tracedShape && drawShape(tracedShape, false);
 }
 
 function drawShape(shape, fill = true) {

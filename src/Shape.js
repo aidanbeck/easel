@@ -111,6 +111,7 @@ class Point extends Shape {
         super(x, y);
     }
     overlaps(otherShape) {
+        if (this == otherShape) { return; }
         if (otherShape instanceof Point) { return this.pointCircleOverlap(this, otherShape); }
         if (otherShape instanceof Circle) { return this.pointCircleOverlap(this, otherShape); }
         if (otherShape instanceof Rectangle) { return this.pointRectangleOverlap(this, otherShape); }
@@ -123,7 +124,7 @@ class Circle extends Shape {
         this.r = r;
     }
     overlaps(otherShape) {
-
+        if (this == otherShape) { return; }
         if (otherShape instanceof Point) { return this.pointCircleOverlap(otherShape, this); }
         if (otherShape instanceof Circle) { return this.circlesOverlap(this, otherShape); }
         if (otherShape instanceof Rectangle) { return this.circleRectangleOverlap(this, otherShape); }
@@ -150,6 +151,7 @@ class Rectangle extends Shape {
     }
 
     overlaps(otherShape) {
+        if (this == otherShape) { return; }
         if (otherShape instanceof Point) { return this.pointRectangleOverlap(otherShape, this); }
         if (otherShape instanceof Circle) { return this.circleRectangleOverlap(otherShape, this); }
         if (otherShape instanceof Rectangle) { return this.rectanglesOverlap(this, otherShape); }
