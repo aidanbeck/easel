@@ -1,10 +1,10 @@
 /*
-    This is a simple program to showcase the power of the Theatre module.
-    It is a simple sketchpad program with a dynamic resolution written in about 50 lines.
+    This is a simple program to showcase the Texture module.
+    Click to add an animated character from Labyrinth, a game I made in high school.
 */
 
-import Theatre from './src/Theatre.js';
-import Texture from './src/Texture.js';
+import Theatre from '../src/Theatre.js';
+import Texture from '../src/Texture.js';
 
 // Theatre Setup
 const canvasElement = document.getElementById("theatre");

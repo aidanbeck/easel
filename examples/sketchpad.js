@@ -3,7 +3,7 @@
     It is a simple sketchpad program with a dynamic resolution written in about 50 lines.
 */
 
-import Theatre from './src/Theatre.js';
+import Theatre from '../src/Theatre.js';
 
 // Theatre Setup
 const canvasElement = document.getElementById("theatre");

@@ -3,8 +3,8 @@
     It is a simple physics simulation written in about 70 lines.
 */
 
-import Theatre from './src/Theatre.js';
-import Velocity from './src/Velocity.js';
+import Theatre from '../src/Theatre.js';
+import Velocity from '../src/Velocity.js';
 
 // Theatre Setup
 const canvasElement = document.getElementById("theatre");

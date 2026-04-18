@@ -3,8 +3,8 @@
     It is a simple drag & drop layout editor with overlap detection in 130 lines.
 */
 
-import Theatre from './src/Theatre.js';
-import { Point, Circle, Rectangle } from './src/Shape.js';
+import Theatre from '../src/Theatre.js';
+import { Point, Circle, Rectangle } from '../src/Shape.js';
 
 // Theatre Setup
 const canvasElement = document.getElementById("theatre");
