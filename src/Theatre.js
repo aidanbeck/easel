@@ -21,6 +21,7 @@ export default class Theatre {
 		this.ctx = canvas.getContext("2d");
 		this.canvas.width = width;
 		this.canvas.height = height;
+		this.preventOddDimensions();
 		
 		this.origin = "NW";
 		this.redraw = () => {};
@@ -72,7 +73,8 @@ export default class Theatre {
 
 		this.canvas.width = newResolution.width;
 		this.canvas.height = newResolution.height;
-
+		this.preventOddDimensions();
+		
 		this.translateOrigin(this.origin);		
 		this.redraw();
 	}
@@ -142,6 +144,15 @@ export default class Theatre {
 			const newWidth = availableWidth / pixelRatio;
 			return { width: newWidth, height: this.preferredHeight };
 		}
+
+	}
+
+	preventOddDimensions() {
+		const widthIsOdd = Math.abs(this.canvas.width % 2) === 1;
+		const heightIsOdd = Math.abs(this.canvas.height % 2) === 1;
+
+		widthIsOdd && this.canvas.width++;
+		heightIsOdd && this.canvas.height++;
 
 	}
 }
