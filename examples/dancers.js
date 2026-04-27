@@ -20,7 +20,7 @@ theatre.redraw = redrawSprites;
 theatre.addEventListener("click", addSprite);
 
 // State
-const guyTexture = new Texture('lab.bmp', 9, -4, -14);
+const guyTexture = new Texture('./examples/lab.bmp', 9, -4, -14);
 const sprites = [];
 
 function addSprite(event) {
