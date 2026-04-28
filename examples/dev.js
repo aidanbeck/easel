@@ -36,7 +36,7 @@ function pointerdown(event) {
 
 // Decks
 
-const bench = new Texture('./examples/bench.jpg');
+// Setup Decks
 const decks = [];
 let currentDeck;
 function renderDeck() {
@@ -44,9 +44,13 @@ function renderDeck() {
 }
 
 // Bench Deck
-const benchScene = new Deck(bench);
+const benchTexture = new Texture('./examples/bench.jpg');
+const benchScene = new Deck(benchTexture);
 decks.push(benchScene);
 currentDeck = benchScene;
+
+
+// Cards
 
 // Head Card
 const headCard = new Card(430, 350, 70, 60);
@@ -63,10 +67,14 @@ headCard.onClick = () => {
 }
 headCard.onRender = (ctx) => {
 
-    ctx.fillStyle = "white";
     ctx.font = "40px Consolas";
-    ctx.fillText(dialogue[dialougeIndex], headCard.x + 80, headCard.y);
+    ctx.fillStyle = "white";
+    ctx.shadowColor = "black"
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
 
+    ctx.fillText(dialogue[dialougeIndex], headCard.x + 80, headCard.y);
 }
 benchScene.cards.push(headCard);
 
