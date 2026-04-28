@@ -6,7 +6,7 @@ function toggleDebugBorders() {
 }
 
 class Card extends Rectangle {
-    constructor(x, y, w, h, texture = null, onClick = () => {}, onHover = () => {}, onRender = null ) {
+    constructor(x, y, w, h, texture = null, onClick = null, onHover = null, onRender = null ) {
             
         super(x, y, w, h);
 
@@ -53,7 +53,7 @@ class Deck {
 
         for (let card of this.cards) {
             if (clickPoint.overlaps(card)) {
-                card.onClick(x, y, ctx);
+                card.onClick && card.onClick(x, y, ctx);
             }
         }
     }
@@ -64,7 +64,7 @@ class Deck {
 
         for (let card of this.cards) {
             if (hoverPoint.overlaps(card)) {
-                card.onHover(x, y, ctx);
+                card.onHover && card.onHover(x, y, ctx);
             }
         }
     }

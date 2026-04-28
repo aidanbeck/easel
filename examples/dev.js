@@ -85,3 +85,14 @@ window.onload = function() {
 };
 
 globalThis.DECKS = decks; 
+
+// todo
+// fullscreen should work with the card centered
+// moving between screens should be showcased
+// frames changing should be showcased
+// visible cards should be showcased
+// cursors could be officially supported
+// offscreen canvas could be supported
+// should onRender context be offset by card? or should it take it's own offset responsibility?
+// the "world" could instead be a key of card names. Moving between "decks" could be oficially supported
+// default hover/click for the background card, could be used to set default cursor or hover action
