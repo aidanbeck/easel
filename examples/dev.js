@@ -40,6 +40,7 @@ function pointerdown(event) {
 const decks = [];
 let currentDeck;
 function renderDeck() {
+    theatre.canvas.width = theatre.canvas.width; // reset canvas
     currentDeck.render(theatre.ctx);
 }
 
