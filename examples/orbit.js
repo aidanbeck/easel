@@ -69,4 +69,6 @@ function physics() {
 
 setInterval(physics, 20);
 
-globalThis.OBJECTS = objects; // expose as global variable for console testing
+// expose as global variables for console testing
+globalThis.THEATRE = theatre;
+globalThis.OBJECTS = objects;

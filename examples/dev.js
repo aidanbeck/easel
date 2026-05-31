@@ -84,7 +84,11 @@ window.onload = function() {
     renderDeck();
 };
 
-globalThis.DECKS = decks; 
+// expose as global variables for console testing
+globalThis.THEATRE = theatre;
+globalThis.TEXTURE = benchTexture;
+globalThis.DECKS = decks;
+
 
 // todo
 // fullscreen should work with the card centered

@@ -55,4 +55,5 @@ function redrawLines() {
     ctx.stroke();
 }
 
-globalThis.THEATRE = theatre; // expose as global variable for console testing
+// expose as global variable for console testing
+globalThis.THEATRE = theatre;

@@ -60,5 +60,6 @@ function animateSprites() {
 
 setInterval(animateSprites, 100);
 
-globalThis.THEATRE = theatre; // expose as global variable for console testing
+// expose as global variables for console testing
+globalThis.THEATRE = theatre;
 globalThis.SPRITES = sprites;

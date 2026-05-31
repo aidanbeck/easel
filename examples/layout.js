@@ -127,4 +127,6 @@ function drawShape(shape, fill = true) {
 
 setInterval(renderShapes, 20);
 
-globalThis.SHAPES = shapes; // expose as global variable for console testing
+// expose as global variables for console testing
+globalThis.THEATRE = theatre;
+globalThis.SHAPES = shapes;
