@@ -45,7 +45,7 @@ function renderDeck() {
 }
 
 // Bench Deck
-const benchTexture = new Texture('./examples/bench.jpg');
+const benchTexture = new Texture('./examples/media/benchScene.jpg');
 const benchScene = new Deck(benchTexture);
 decks.push(benchScene);
 currentDeck = benchScene;
