@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0"/>
   <title>Easel Demo</title>
-  <script type="module" src="./examples/dancers.js" defer></script>
   <style>
     html, body {
     margin: 0;
@@ -15,5 +14,17 @@
 </head>
 <body>
   <canvas id="theatre"></canvas>
+  <script>
+
+    async function loadProgram(path) {
+      await import(path);
+    }
+
+    const url = window.location.href;
+    const queryIndex = url.indexOf("?") + 1;
+    const exampleName = url.substring(queryIndex);
+    loadProgram(`./examples/${exampleName}.js`);
+    
+  </script>
 </body>
 </html>
