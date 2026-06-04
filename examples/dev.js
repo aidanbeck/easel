@@ -3,7 +3,7 @@
 */
 
 import Theatre from '../src/Theatre.js';
-import Terrain from '../src/Terrain.js';
+import {Terrain, Camera} from '../src/Terrain.js';
 
 // Theatre Setup
 const canvasElement = document.getElementById("theatre");
@@ -14,7 +14,7 @@ theatre.shorterDimensionConsistent = true;
 theatre.canvas.style.backgroundColor = "rgb(255, 255, 255)";
 theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
 theatre.redraw = () => {
-    terrain.drawRays(null, theatre);
+    terrain.drawRays(camera, theatre);
 };
 
 // Interaction
@@ -31,8 +31,16 @@ function pointerdown(event) {
 
 
 // Terrain
-
+const camera = new Camera(10, 20, 10, 180, 0, 90);
 const terrain = new Terrain(1000, 1000);
+
+
+
+for (let x = 0; x < 1000; x++) {
+    for (let y = 0; y < 1000; y++) {
+        terrain.setPoint(x, y, 0, `rgb(${x / 5},100,${y / 5})`);
+    }
+}
 
 
 // expose as global variables for console testing

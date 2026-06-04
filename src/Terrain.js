@@ -9,12 +9,12 @@ class Camera {
     }
 }
 
-export default class Terrain {
+class Terrain {
     constructor(width, height) {
         this.width = width;
         this.height = height;
         this.altitudeMap = new Uint8Array(width * height);
-        this.colorMap = new Uint32Array(width * height);
+        this.colorMap = [];
     }
 
     getPointIndex(x, y) {
@@ -36,7 +36,7 @@ export default class Terrain {
         if (color) { this.colorMap[index] = color; }
     }
 
-    drawRays(camera, theatre) {
+    drawRays(camera = CAMERA, theatre) {
 
         const highestYs = new Int32Array(theatre.canvas.width).fill(theatre.canvas.height);
 
@@ -44,32 +44,36 @@ export default class Terrain {
 
         for (let rayDepth = 1; rayDepth < 500; rayDepth += rayDepthOffset) {
 
-            // get starting world x & y
-            // get offsets for x & y per each ray
+            const leftPoint = {
+                x: camera.x - rayDepth,
+                y: camera.y + 10 + rayDepth
+            }
 
-            //debug for testing
-            let startX = 0;
-            let startY = rayDepth;
-            let xOffset = 1;
-            let yOffset = 1;
+            const rightPoint = {
+                x: camera.x + rayDepth,
+                y: camera.y + 10 + rayDepth
+            }
 
-            this.drawRay(startX, startY, xOffset, yOffset, theatre, highestYs);
+            const rayWidth = rightPoint.x - leftPoint.x;
+
+            let xOffset = rayWidth / theatre.canvas.width;
+            let yOffset = 0; // assumes straight line
+
+            this.drawRay(leftPoint.x, leftPoint.y, xOffset, yOffset, theatre, highestYs, camera);
 
             rayDepthOffset += 0.005;
         }
     }
 
-    drawRay(x, y, xOffset, yOffset, theatre, highestYs) {
+    drawRay(x, y, xOffset, yOffset, theatre, highestYs, camera) {
         
-        const CAMERA = new Camera(10, 20, 10, 180, 0, 90);
-
         for (let i = 0; i < theatre.canvas.width; i++) {
 
             const terrainPoint = this.getPoint( Math.floor(x), Math.floor(y));
-            const color = "green"; //terrainPoint.color;
+            const color = terrainPoint.color;
             const altitude = terrainPoint.altitude;
 
-            let heightOnScreen = (CAMERA.z - altitude) + CAMERA.pitch; // !!! This is likely missing crucial math
+            let heightOnScreen = (camera.z - altitude) + camera.pitch; // !!! Could be missing scaling variable and being affected by raydepth
 
             this.drawPillar(i, heightOnScreen, highestYs[i], color, theatre.ctx);
 
@@ -92,3 +96,4 @@ export default class Terrain {
     }
 }
 
+export { Terrain, Camera };
