@@ -8,7 +8,7 @@ import Terrain from '../src/Terrain.js';
 // Theatre Setup
 const canvasElement = document.getElementById("theatre");
 const theatre = new Theatre(canvasElement, 1080, 720);
-// theatre.origin = "CENTER";
+theatre.origin = "CENTER";
 theatre.makeFullScreen();
 theatre.shorterDimensionConsistent = true;
 theatre.canvas.style.backgroundColor = "rgb(255, 255, 255)";

@@ -35,4 +35,14 @@ export default class Terrain {
         if (altitude) { this.altitudeMap[index] = altitude; }
         if (color) { this.colorMap[index] = color; }
     }
+
+    drawPillar(x, y, height, color, ctx) { // may move this method
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y + height);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = color;
+        ctx.stroke();
+    }
 }
+
