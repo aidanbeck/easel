@@ -13,7 +13,9 @@ theatre.makeFullScreen();
 theatre.shorterDimensionConsistent = true;
 theatre.canvas.style.backgroundColor = "rgb(255, 255, 255)";
 theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
-theatre.redraw = () => {};
+theatre.redraw = () => {
+    terrain.drawRays(null, theatre);
+};
 
 // Interaction
 theatre.addEventListener("pointerdown", pointerdown);
@@ -31,6 +33,7 @@ function pointerdown(event) {
 // Terrain
 
 const terrain = new Terrain(10, 10);
+
 
 // expose as global variables for console testing
 globalThis.THEATRE = theatre;

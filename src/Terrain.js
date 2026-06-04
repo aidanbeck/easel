@@ -36,6 +36,38 @@ export default class Terrain {
         if (color) { this.colorMap[index] = color; }
     }
 
+    drawRays(camera, theatre) {
+
+        const highestYs = new Int32Array(theatre.canvas.width).fill(theatre.canvas.height / 2); // assumes origin is in the middle
+
+        let rayDepthOffset = 1;
+
+        for (let rayDepth = 1; rayDepth < 500; rayDepth += rayDepthOffset) {
+
+            // get starting world x & y
+            // get offsets for x & y per each ray
+
+            //debug for testing
+            let y = 0;
+            let x = rayDepth;
+            let xOffset = 4;
+            let yOffset = 4;
+
+            this.drawRay(x, y, xOffset, yOffset, theatre.ctx);
+
+            rayDepthOffset += 0.005;
+        }
+
+
+
+    }
+
+    drawRay(x, y, xOffset, yOffset, ctx) {
+
+        //for testing
+        this.drawPillar(x, y, 100, "red", ctx);
+    }
+
     drawPillar(x, y, height, color, ctx) { // may move this method
         ctx.beginPath();
         ctx.moveTo(x, y);
