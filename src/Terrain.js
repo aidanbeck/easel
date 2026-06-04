@@ -17,7 +17,22 @@ export default class Terrain {
         this.colorMap = new Uint32Array(width * height);
     }
 
-    getIndexOfPoint(x, y) {
+    getPointIndex(x, y) {
         return y * this.width + x;
+    }
+
+    getPoint(x, y) {
+        const index = this.getPointIndex(x, y);
+        return {
+            altitude: this.altitudeMap[index],
+            color: this.colorMap[index]
+        }
+    }
+
+    setPoint(x, y, altitude, color) {
+        const index = this.getPointIndex(x, y);
+
+        if (altitude) { this.altitudeMap[index] = altitude; }
+        if (color) { this.colorMap[index] = color; }
     }
 }
