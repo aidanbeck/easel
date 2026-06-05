@@ -34,6 +34,16 @@ function pointerdown(event) {
 const camera = new Camera(10, 20, 10, 180, 0, 90);
 const terrain = new Terrain(1000, 1000);
 
+const colorMap = new Image(); colorMap.src = './examples/media/C1W.png';
+const depthMap = new Image(); depthMap.src = './examples/media/D1.png';
+
+depthMap.onload = () => {
+
+    for (i = 0; i < 1000 * 1000; i++) {
+        
+    }
+
+}
 
 
 for (let x = 0; x < 1000; x++) {
@@ -46,3 +56,4 @@ for (let x = 0; x < 1000; x++) {
 // expose as global variables for console testing
 globalThis.THEATRE = theatre;
 globalThis.TERRAIN = terrain;
+globalThis.CAMERA = camera;
