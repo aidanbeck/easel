@@ -32,26 +32,47 @@ function pointerdown(event) {
 
 // Terrain
 const camera = new Camera(10, 20, 10, 180, 0, 90);
-const terrain = new Terrain(1000, 1000);
+const terrain = new Terrain(1024, 1024);
 
-const colorMap = new Image(); colorMap.src = './examples/media/C1W.png';
-const depthMap = new Image(); depthMap.src = './examples/media/D1.png';
+const colorImage = new Image(); colorImage.src = './examples/media/C1W.png';
+const altitudeImage = new Image(); altitudeImage.src = './examples/media/D1.png';
+
+colorMap.onload = () => {
+
+    const canvas = new OffscreenCanvas(1024, 1024);
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(colorImage, 0, 0);
+    const imageData = ctx.getImageData(0, 0, 1024, 1024).data;
+
+    for (let i = 0; i < 1024 * 1024; i++) {
+
+        let indexNumber = Math.floor (i / 4);
+
+        let r = imageData[i]; i++;
+        let g = imageData[i]; i++;
+        let b = imageData[i]; i++;   
+
+        terrain.colorMap[indexNumber] = `rgb(${r},${g},${b})`;
+    }
+}
 
 depthMap.onload = () => {
 
-    for (i = 0; i < 1000 * 1000; i++) {
-        
+    const canvas = new OffscreenCanvas(1024, 1024);
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(colorImage, 0, 0);
+    const imageData = ctx.getImageData(0, 0, 1024, 1024).data;
+
+    for (let i = 0; i < 1024 * 1024; i += 4) {
+
+        let indexNumber = Math.floor (i / 4);
+        let r = imageData[i]; 
+
+        terrain.altitudeMap[indexNumber] = r;
     }
-
 }
-
-
-for (let x = 0; x < 1000; x++) {
-    for (let y = 0; y < 1000; y++) {
-        terrain.setPoint(x, y, 0, `rgb(${x / 5},100,${y / 5})`);
-    }
-}
-
 
 // expose as global variables for console testing
 globalThis.THEATRE = theatre;
