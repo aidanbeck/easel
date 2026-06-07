@@ -73,7 +73,7 @@ class Terrain {
             const color = terrainPoint.color;
             const altitude = terrainPoint.altitude;
 
-            let scale = 1 / rayDepth * 300; // 300 is the vertical scaling number. 240 was use in s-macke's demo.
+            let scale = 1 / rayDepth * 150; // 300 is the vertical scaling number. 240 was use in s-macke's demo.
             let heightOnScreen = (camera.z - altitude) * scale + camera.pitch;
             heightOnScreen = Math.floor(heightOnScreen); // prevents line gaps
 
