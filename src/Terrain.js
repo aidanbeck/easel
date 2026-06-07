@@ -36,13 +36,13 @@ class Terrain {
         if (color) { this.colorMap[index] = color; }
     }
 
-    drawRays(camera = CAMERA, theatre, maxRayDepth, depth) {
+    drawRays(camera = CAMERA, theatre, maxRayDepth, minRayDepth) {
 
         const highestYs = new Int32Array(theatre.canvas.width).fill(theatre.canvas.height);
 
         let rayDepthOffset = 1;
 
-        for (let rayDepth = depth; rayDepth < maxRayDepth; rayDepth += rayDepthOffset) {
+        for (let rayDepth = minRayDepth; rayDepth < maxRayDepth; rayDepth += rayDepthOffset) {
 
             const leftPoint = {
                 x: camera.x - rayDepth,
@@ -75,8 +75,7 @@ class Terrain {
 
             let scale = 1 / rayDepth * 300; // 300 is the vertical scaling number. 240 was use in s-macke's demo.
             let heightOnScreen = (camera.z - altitude) * scale + camera.pitch;
-            heightOnScreen = Math.floor(heightOnScreen);
-
+            heightOnScreen = Math.floor(heightOnScreen); // prevents line gaps
 
             if (heightOnScreen <= highestYs[i]) {
                 this.drawPillar(i, heightOnScreen, highestYs[i], color, theatre.ctx);
@@ -94,7 +93,7 @@ class Terrain {
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(x, height);
-        ctx.lineWidth = 2; // 2 makes colors proper
+        ctx.lineWidth = 2; // 2 makes colors non-transparent
         ctx.strokeStyle = color;
         ctx.stroke();
     }

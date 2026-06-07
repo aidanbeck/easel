@@ -15,24 +15,22 @@ theatre.canvas.style.backgroundColor = "rgb(255, 255, 255)";
 theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
 theatre.redraw = () => {
     theatre.ctx.clearRect(0, 0, 1000, 1000);
-    theatre.ctx.drawImage(colorImage, 0, 0);
-    terrain.drawRays(camera, theatre, maxRayDepth, maxRayDepth - 0.001);
+    // theatre.ctx.drawImage(colorImage, 0, 0);
+    terrain.drawRays(camera, theatre, 800, 1);
+    theatre.ctx.fillRect(camera.x-5, camera.y-5, 10, 10); // draw camera position;
 };
 
 // Interaction
-theatre.addEventListener("pointerdown", pointerdown);
+theatre.addEventListener("pointermove", pointermove);
 
-let maxRayDepth = 1;
-function pointerdown(event) {
+setInterval(theatre.redraw, 50);
+
+function pointermove(event) {
     let {x, y} = theatre.getEventCoordinates(event);
 
     camera.x = x;
     camera.y = y;
-
-    maxRayDepth++;
     camera.z = terrain.getPoint(Math.floor(x), Math.floor(y)).altitude + 20;
-
-    theatre.redraw();
 }
 
 
@@ -51,7 +49,7 @@ colorImage.onload = () => {
     ctx.drawImage(colorImage, 0, 0);
     const imageData = ctx.getImageData(0, 0, 1024, 1024).data;
 
-    for (let i = 0; i < 1024 * 1024; i++) {
+    for (let i = 0; i < imageData.length; i++) {
 
         let indexNumber = Math.floor (i / 4);
 
@@ -71,7 +69,7 @@ altitudeImage.onload = () => {
     ctx.drawImage(altitudeImage, 0, 0);
     const imageData = ctx.getImageData(0, 0, 1024, 1024).data;
 
-    for (let i = 0; i < 1024 * 1024; i += 4) {
+    for (let i = 0; i < imageData.length; i += 4) {
 
         let indexNumber = Math.floor (i / 4);
         let r = imageData[i]; 
