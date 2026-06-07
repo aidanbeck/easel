@@ -36,13 +36,13 @@ class Terrain {
         if (color) { this.colorMap[index] = color; }
     }
 
-    drawRays(camera = CAMERA, theatre) {
+    drawRays(camera = CAMERA, theatre, maxRayDepth, depth) {
 
         const highestYs = new Int32Array(theatre.canvas.width).fill(theatre.canvas.height);
 
         let rayDepthOffset = 1;
 
-        for (let rayDepth = 1; rayDepth < 500; rayDepth += rayDepthOffset) {
+        for (let rayDepth = depth; rayDepth < maxRayDepth; rayDepth += rayDepthOffset) {
 
             const leftPoint = {
                 x: camera.x - rayDepth,
@@ -59,13 +59,13 @@ class Terrain {
             let xOffset = rayWidth / theatre.canvas.width;
             let yOffset = 0; // assumes straight line
 
-            this.drawRay(leftPoint.x, leftPoint.y, xOffset, yOffset, theatre, highestYs, camera);
+            this.drawRay(leftPoint.x, leftPoint.y, xOffset, yOffset, theatre, highestYs, rayDepth, camera);
 
             rayDepthOffset += 0.005;
         }
     }
 
-    drawRay(x, y, xOffset, yOffset, theatre, highestYs, camera) {
+    drawRay(x, y, xOffset, yOffset, theatre, highestYs, rayDepth, camera) {
         
         for (let i = 0; i < theatre.canvas.width; i++) {
 
@@ -73,11 +73,15 @@ class Terrain {
             const color = terrainPoint.color;
             const altitude = terrainPoint.altitude;
 
-            let heightOnScreen = (camera.z - altitude) + camera.pitch; // !!! Could be missing scaling variable and being affected by raydepth
+            let scale = 1 / rayDepth * 300; // 300 is the vertical scaling number. 240 was use in s-macke's demo.
+            let heightOnScreen = (camera.z - altitude) * scale + camera.pitch;
+            heightOnScreen = Math.floor(heightOnScreen);
 
-            this.drawPillar(i, heightOnScreen, highestYs[i], color, theatre.ctx);
 
-            if (heightOnScreen > highestYs[i]) { highestYs[i] = heightOnScreen; }
+            if (heightOnScreen <= highestYs[i]) {
+                this.drawPillar(i, heightOnScreen, highestYs[i], color, theatre.ctx);
+                highestYs[i] = heightOnScreen;
+            }
 
             x += xOffset;
             y += yOffset;
@@ -90,7 +94,7 @@ class Terrain {
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(x, height);
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 2; // 2 makes colors proper
         ctx.strokeStyle = color;
         ctx.stroke();
     }

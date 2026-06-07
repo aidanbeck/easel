@@ -14,30 +14,36 @@ theatre.shorterDimensionConsistent = true;
 theatre.canvas.style.backgroundColor = "rgb(255, 255, 255)";
 theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
 theatre.redraw = () => {
-    terrain.drawRays(camera, theatre);
+    theatre.ctx.clearRect(0, 0, 1000, 1000);
+    theatre.ctx.drawImage(colorImage, 0, 0);
+    terrain.drawRays(camera, theatre, maxRayDepth, maxRayDepth - 0.001);
 };
 
 // Interaction
 theatre.addEventListener("pointerdown", pointerdown);
-theatre.addEventListener("pointermove", pointermove);
 
-function pointermove(event) {
-
-}
-
+let maxRayDepth = 1;
 function pointerdown(event) {
+    let {x, y} = theatre.getEventCoordinates(event);
 
+    camera.x = x;
+    camera.y = y;
+
+    maxRayDepth++;
+    camera.z = terrain.getPoint(Math.floor(x), Math.floor(y)).altitude + 20;
+
+    theatre.redraw();
 }
 
 
 // Terrain
-const camera = new Camera(10, 20, 10, 180, 0, 90);
+const camera = new Camera(0, 0, 50, 180, 0, 90);
 const terrain = new Terrain(1024, 1024);
 
 const colorImage = new Image(); colorImage.src = './examples/media/C1W.png';
 const altitudeImage = new Image(); altitudeImage.src = './examples/media/D1.png';
 
-colorMap.onload = () => {
+colorImage.onload = () => {
 
     const canvas = new OffscreenCanvas(1024, 1024);
     const ctx = canvas.getContext("2d");
@@ -57,12 +63,12 @@ colorMap.onload = () => {
     }
 }
 
-depthMap.onload = () => {
+altitudeImage.onload = () => {
 
     const canvas = new OffscreenCanvas(1024, 1024);
     const ctx = canvas.getContext("2d");
 
-    ctx.drawImage(colorImage, 0, 0);
+    ctx.drawImage(altitudeImage, 0, 0);
     const imageData = ctx.getImageData(0, 0, 1024, 1024).data;
 
     for (let i = 0; i < 1024 * 1024; i += 4) {
