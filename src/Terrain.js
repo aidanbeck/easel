@@ -78,7 +78,7 @@ class Terrain {
             heightOnScreen = Math.floor(heightOnScreen); // prevents line gaps
 
             if (heightOnScreen <= highestYs[i]) {
-                this.drawPillar(i, heightOnScreen, highestYs[i], color, theatre.ctx);
+                this.drawPillar(i, heightOnScreen, highestYs[i] - heightOnScreen, color, theatre.ctx);
                 highestYs[i] = heightOnScreen;
             }
 
@@ -90,12 +90,8 @@ class Terrain {
     }
 
     drawPillar(x, y, height, color, ctx) {
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x, height);
-        ctx.lineWidth = 2; // 2 makes colors non-transparent
-        ctx.strokeStyle = color;
-        ctx.stroke();
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, 1, height);
     }
 }
 

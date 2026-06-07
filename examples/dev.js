@@ -23,8 +23,6 @@ theatre.redraw = () => {
 // Interaction
 theatre.addEventListener("pointermove", pointermove);
 
-setInterval(theatre.redraw, 50);
-
 function pointermove(event) {
     let {x, y} = theatre.getEventCoordinates(event);
 
@@ -77,6 +75,8 @@ altitudeImage.onload = () => {
         terrain.altitudeMap[indexNumber] = r;
     }
 }
+
+setInterval(theatre.redraw, 10);
 
 // expose as global variables for console testing
 globalThis.THEATRE = theatre;
