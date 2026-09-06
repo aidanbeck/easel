@@ -69,14 +69,18 @@ globalThis.EASEL = {
 }
 
 /* Example:
+const cellSize = 50;
+let mouseButton - -1;
 
-pointerDown = function(e) {
+pointerDown = function(e) { mouseButton = e.button; }
+pointerUp = function(e) { mouseButton = e.button; }
+
+pointerMove = function(e) {
     let {x, y} = theatre.getEventCoordinates(e);
 
-    const cellSize = 50;
     const cell = getCellCoordinate(x, y, cellSize);
-
-    ctx.fillRect(cell.x * cellSize, cell.y * cellSize, cellSize, cellSize);
+    mouseMode == 0 && ctx.fillRect(cell.x * cellSize, cell.y * cellSize, cellSize, cellSize);
+    mouseMode == 2 && ctx.clearRect(cell.x * cellSize, cell.y * cellSize, cellSize, cellSize);
 }
 
 function getCellCoordinate(x, y, cellSize) {
