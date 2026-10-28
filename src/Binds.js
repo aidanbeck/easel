@@ -41,8 +41,8 @@ export default class Binds {
     constructor(element = document) {
         this.values = {};
         this.binds = {};
-        element.addEventListener('keydown', this.keyDown);
-        element.addEventListener('keyup', this.keyUp);
+        element.addEventListener('keydown', this.keyDown.bind(this));
+        element.addEventListener('keyup', this.keyUp.bind(this));
     }
 
     bindLogic(key, downLogic = null, upLogic = null) {
@@ -66,6 +66,7 @@ export default class Binds {
     keyDown(event) {
         const key = event.key;
         const binds = this.binds[key];
+        if (!binds) { return; }
         for (const bind of binds) {
             bind && bind.onDown(this.values);
         }
@@ -74,15 +75,9 @@ export default class Binds {
     keyUp(event) {
         const key = event.key;
         const binds = this.binds[key];
+        if (!binds) { return; }
         for (const bind of binds) {
             bind && bind.onUp(this.values);
         }
     }
 }
-
-
-// const keybinds = new Binds();
-
-// keybinds.bindLogic('w', upLogic, downLogic);
-// keybinds.bindVariable('w', 'variableName', upValue, downValue);
-// keybinds.getValue('key');
