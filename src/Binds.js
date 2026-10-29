@@ -68,7 +68,7 @@ export default class Binds {
         const binds = this.binds[key];
         if (!binds) { return; }
         for (const bind of binds) {
-            bind && bind.onDown(this.values);
+            bind.downLogic && bind.onDown(this.values);
         }
     }
 
@@ -77,7 +77,7 @@ export default class Binds {
         const binds = this.binds[key];
         if (!binds) { return; }
         for (const bind of binds) {
-            bind && bind.onUp(this.values);
+            bind.upLogic && bind.onUp(this.values);
         }
     }
 }
