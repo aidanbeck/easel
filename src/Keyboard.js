@@ -1,4 +1,4 @@
-class BoundLogic {
+class LogicBind {
     constructor(downLogic, upLogic) {
         this.downLogic = downLogic;
         this.upLogic = upLogic;
@@ -16,7 +16,7 @@ class BoundLogic {
     }
 }
 
-class BoundValue {
+class ValueBind {
     constructor(setter, downValue, upValue) {
         this.setter = setter;
         this.downValue = downValue;
@@ -35,7 +35,7 @@ class BoundValue {
     }
 }
 
-class BoundToggle { // This only works on key down, but that is an acceptable limitation for now.
+class ToggleBind { // This only works on key down, but that is an acceptable limitation for now.
     constructor(setter, values) {
         this.setter = setter;
         this.values = values;
@@ -59,7 +59,7 @@ class BoundToggle { // This only works on key down, but that is an acceptable li
     }
 }
 
-export default class Binds {
+export default class Keyboard {
     constructor(element = document) {
         this.binds = {};
         element.addEventListener('keydown', this.keyDown.bind(this));
@@ -69,21 +69,21 @@ export default class Binds {
     bindLogic(key, downLogic = null, upLogic = null) {
         if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; } // create array to hold bind if none exists
         
-        const bind = new BoundLogic(downLogic, upLogic);
+        const bind = new LogicBind(downLogic, upLogic);
         this.binds[key].push(bind);
     }
 
     bindValue(key, setter, upValue = true, downValue = false) {
         if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; }  // create array to hold bind if none exists
 
-        const bind = new BoundValue(setter, downValue, upValue);
+        const bind = new ValueBind(setter, downValue, upValue);
         this.binds[key].push(bind);
     }
 
     bindToggle(key, setter, values = [true, false]) {
         if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; }  // create array to hold bind if none exists
 
-        const bind = new BoundToggle(setter, values);
+        const bind = new ToggleBind(setter, values);
         this.binds[key].push(bind);
     }
     
