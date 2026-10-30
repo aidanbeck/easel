@@ -35,6 +35,30 @@ class BoundValue {
     }
 }
 
+class BoundToggle { // This only works on key down, but that is an acceptable limitation for now.
+    constructor(setter, values) {
+        this.setter = setter;
+        this.values = values;
+        this.valueIndex = 0;
+        this.isDown = false;
+    }
+
+    onDown() {
+        const value = this.values[this.valueIndex];
+        this.setter(value);
+        this.isDown = true;
+        this.valueIndex++;
+
+        if (this.valueIndex > this.values.length - 1) {
+            this.valueIndex = 0;
+        }
+    }
+    
+    onUp() {
+        this.isDown = false;
+    }
+}
+
 export default class Binds {
     constructor(element = document) {
         this.binds = {};
@@ -53,6 +77,13 @@ export default class Binds {
         if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; }  // create array to hold bind if none exists
 
         const bind = new BoundValue(setter, downValue, upValue);
+        this.binds[key].push(bind);
+    }
+
+    bindToggle(key, setter, values = [true, false]) {
+        if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; }  // create array to hold bind if none exists
+
+        const bind = new BoundToggle(setter, values);
         this.binds[key].push(bind);
     }
     
