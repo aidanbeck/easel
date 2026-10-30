@@ -1,65 +1,58 @@
-class BindableFunction {
+class BoundLogic {
     constructor(downLogic, upLogic) {
         this.downLogic = downLogic;
         this.upLogic = upLogic;
+        this.isDown = false;
     }
-
-    onDown(values) { this.downLogic(); } // does not pass values
-    onUp(values) { this.upLogic(); } // does not pass values
+    
+    onDown() {
+        this.downLogic && this.downLogic();
+        this.isDown = true;
+    }
+    
+    onUp() {
+        this.upLogic && this.upLogic();
+        this.isDown = false;
+    }
 }
 
-class BindableVariable {
-    constructor(variableName, downValue, upValue) {
-        this.variableName = variableName;
+class BoundValue {
+    constructor(setter, downValue, upValue) {
+        this.setter = setter;
         this.downValue = downValue;
         this.upValue = upValue;
+        this.isDown = false;
     }
-
-    onDown(values) { values[this.variableName] = this.downValue; }
-    onUp(values) { values[this.variableName] = this.upValue; }
-}
-
-class BindableToggle {
-    constructor(variableName, toggleOnDown, toggleOnUp) {
-        this.variableName = variableName;
-        this.toggleOnDown = toggleOnDown;
-        this.toggleOnUp = toggleOnUp;
+    
+    onDown() {
+        this.setter(this.downValue);
+        this.isDown = true;
     }
-
-    onDown(values) {
-        if (!this.toggleOnDown) { return; }
-        values[this.variableName] = !values[this.variableName];
-    }
-
-    onUp(values) {
-        if (!this.toggleOnUp) { return; }
-        values[this.variableName] = !values[this.variableName];
+    
+    onUp() {
+        this.setter(this.upValue);
+        this.isDown = false;
     }
 }
 
 export default class Binds {
     constructor(element = document) {
-        this.values = {};
         this.binds = {};
         element.addEventListener('keydown', this.keyDown.bind(this));
         element.addEventListener('keyup', this.keyUp.bind(this));
     }
 
     bindLogic(key, downLogic = null, upLogic = null) {
-        const bind = new BindableFunction(downLogic, upLogic);
-        if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; }
+        if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; } // create array to hold bind if none exists
+        
+        const bind = new BoundLogic(downLogic, upLogic);
         this.binds[key].push(bind);
     }
 
-    bindValue(key, variableName, upValue = true, downValue = false) {
-        const bind = new BindableVariable(downValue, upValue);
-        if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; }
-        this.binds[key].push(bind);
-    }
+    bindValue(key, setter, upValue = true, downValue = false) {
+        if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; }  // create array to hold bind if none exists
 
-    bindToggle(key, variableName, toggleOnDown = true, toggleOnUp = false) {
-        const bind = new BindableToggle(variableName, toggleOnDown, toggleOnUp);
-        if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; }
+        const bind = new BoundValue(setter, downValue, upValue);
         this.binds[key].push(bind);
     }
     
@@ -67,8 +60,9 @@ export default class Binds {
         const key = event.key;
         const binds = this.binds[key];
         if (!binds) { return; }
+        
         for (const bind of binds) {
-            bind.downLogic && bind.onDown(this.values);
+            !bind.isDown && bind.onDown();
         }
     }
 
@@ -76,8 +70,9 @@ export default class Binds {
         const key = event.key;
         const binds = this.binds[key];
         if (!binds) { return; }
+        
         for (const bind of binds) {
-            bind.upLogic && bind.onUp(this.values);
+           bind.isDown && bind.onUp();
         }
     }
 }
