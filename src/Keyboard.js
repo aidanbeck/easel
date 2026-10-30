@@ -73,7 +73,7 @@ export default class Keyboard {
         this.binds[key].push(bind);
     }
 
-    bindValue(key, setter, upValue = true, downValue = false) {
+    bindValue(key, setter, downValue = true, upValue = false) {
         if (typeof this.binds[key] == 'undefined') { this.binds[key] = []; }  // create array to hold bind if none exists
 
         const bind = new ValueBind(setter, downValue, upValue);
