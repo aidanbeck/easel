@@ -10,7 +10,7 @@ import { Point, Circle, Rectangle } from '../src/Shape.js';
 import { Card, Deck } from '../src/Card.js';
 import { Terrain, Camera } from '../src/Terrain.js';
 import PhysicsObject from '../src/PhysicsObject.js';
-import Binds from '../src/Binds.js';
+import Keyboard from '../src/Keyboard.js';
 
 // Theatre Setup
 window.canvasElement = document.getElementById("theatre");
@@ -31,7 +31,7 @@ window.rectangle = new Rectangle(0, 0, 10, 10);
 window.circle = new Circle(0, 0, 10);
 window.velocity = new Velocity(1, 1);
 window.physicsObject = new PhysicsObject(rectangle, velocity);
-// window.binds = new Binds();
+window.keyboard = new Keyboard(document);
 
 
 // Interaction
@@ -65,7 +65,7 @@ window.drawCircle = function(circle) { // Should classes take responsibility for
 }
 
 globalThis.EASEL = {
-    Theatre, Texture, Velocity, Point, Circle, Rectangle, Card, Deck, Terrain, Camera, PhysicsObject, Binds
+    Theatre, Texture, Velocity, Point, Circle, Rectangle, Card, Deck, Terrain, Camera, PhysicsObject, Keyboard
 }
 
 /* Example:
