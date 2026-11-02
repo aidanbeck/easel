@@ -3,6 +3,7 @@
 */
 
 import Theatre from '../src/Theatre.js';
+import Keyboard from '../src/Keyboard.js';
 import {Terrain, Camera} from '../src/Terrain.js';
 
 // Theatre Setup
@@ -21,40 +22,39 @@ theatre.redraw = () => {
 };
 
 // Interaction
-theatre.addEventListener("pointermove", pointermove);
-theatre.addEventListener("pointerdown", pointerdown);
-
-
-function pointermove(event) {
-    let {x, y} = theatre.getEventCoordinates(event);
-
-    x *= 4;
-    y *= 4;
-
-    camera.x = x ;
-    camera.y = y;
-    camera.z = terrain.getPoint(Math.floor(x), Math.floor(y)).altitude + 20;
+const controls = {
+    left: false,
+    right: false,
+    forward: false,
+    backward: false,
 }
 
-function pointerdown(event) {
-    let {x, y} = theatre.getEventCoordinates(event);
-
-    x *= 4;
-    y *= 4;
-
-    x = Math.floor(x);
-    y = Math.floor(y);
-    
-    let newAltitude = terrain.getPoint(x, y).altitude + 10;
-    let newColor = terrain.getPoint(1024 - x, 1024 - y).color;
+const keyboard = new Keyboard();
+keyboard.bindValue('ArrowLeft', v => controls.left = v);
+keyboard.bindValue('ArrowRight', v => controls.right = v);
+keyboard.bindValue('ArrowUp', v => controls.forward = v);
+keyboard.bindValue('ArrowDown', v => controls.backward = v);
+keyboard.bindValue(' ', () => {
+    const x = camera.x;
+    const y = camera.y;
+    const newAltitude = terrain.getPoint(x, y).altitude + 10;
+    const newColor = terrain.getPoint(1024 - x, 1024 - y).color;
 
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
             terrain.setPoint(x - 5 + i, y - 5 + j, newAltitude, newColor);
         }
     }
+});
 
-}
+setInterval(() => {
+    controls.left && camera.x--;
+    controls.right && camera.x++;
+    controls.forward && camera.y--;
+    controls.backward && camera.y++;
+    
+    camera.z = terrain.getPoint(Math.floor(x), Math.floor(y)).altitude + 20;
+}, 20);
 
 
 // Terrain
