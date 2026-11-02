@@ -4,7 +4,7 @@
 
 import Theatre from '../src/Theatre.js';
 import Velocity from '../src/Velocity.js';
-import { Rectangle } from '../src/Shape.js'
+import { Rectangle, Point } from '../src/Shape.js'
 
 import Keyboard from '../src/Keyboard.js';
 
@@ -25,17 +25,19 @@ const objects = [{
     r: 10,
     v: new Velocity(0,0)
 }];
-const goal = new Rectangle();
-randomizeGoal(goal);
+const goal = new Rectangle(-100, -200, 200, 100);
 
 function randomizeGoal(goal) {
     const width = theatre.canvas.width;
     const height = theatre.canvas.height;
-    goal.x = Math.floor(Math.random() * width - (width / 2));
-    goal.y = Math.floor(Math.random() * height - (height / 2));
 
-    goal.w = Math.floor(Math.random() * 200);
-    goal.h = Math.floor(Math.random() * 200);
+    goal.w = Math.floor(Math.random() * 200) + 25;
+    goal.h = Math.floor(Math.random() * 200) + 25;
+
+    goal.x = Math.floor(Math.random() * width - (width / 2)) - (goal.w / 2);
+    goal.y = Math.floor(Math.random() * height - (height / 2)) - (goal.h / 2);
+
+    
 }
 
 function renderObjects() {
@@ -82,6 +84,13 @@ function physics() {
         if (object.y + object.r > theatre.canvas.height / 2) {
             object.v.y = -Math.abs(object.v.y);
         }
+    }
+}
+
+function goalHitDetection() {
+    for (let object of objects) {
+        if (!goal.overlaps(new Point(object.x, object.y))) { continue; }
+        randomizeGoal(goal);
     }
 }
 
@@ -157,6 +166,7 @@ keyboard.bindLogic('z',
 
 setInterval(() => {
     physics();
+    goalHitDetection();
     moveCharacter(objects[0]);
     renderObjects();
     ctx.fillRect(goal.x, goal.y, goal.w, goal.h);
