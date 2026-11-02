@@ -50,10 +50,17 @@ keyboard.bindValue(' ', () => {
 setInterval(() => {
     controls.left && camera.x--;
     controls.right && camera.x++;
-    controls.forward && camera.y--;
-    controls.backward && camera.y++;
+    controls.forward && camera.y++;
+    controls.backward && camera.y--;
     
-    camera.z = terrain.getPoint(Math.floor(x), Math.floor(y)).altitude + 20;
+    const minHeight = terrain.getPoint(Math.floor(camera.x), Math.floor(camera.y)).altitude + 20;
+    
+    if (camera.z < minHeight) {
+        camera.z = minHeight;
+    } else if (camera.z > minHeight) {
+        camera.z--;
+    }
+    
 }, 20);
 
 
