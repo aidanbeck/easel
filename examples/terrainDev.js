@@ -27,6 +27,10 @@ const controls = {
     right: false,
     forward: false,
     backward: false,
+    lookLeft: false,
+    lookRight: false,
+    lookUp: false,
+    lookDown: false
 }
 
 const keyboard = new Keyboard();
@@ -34,6 +38,10 @@ keyboard.bindValue('ArrowLeft', v => controls.left = v);
 keyboard.bindValue('ArrowRight', v => controls.right = v);
 keyboard.bindValue('ArrowUp', v => controls.forward = v);
 keyboard.bindValue('ArrowDown', v => controls.backward = v);
+keyboard.bindValue('a', v => controls.lookLeft = v);
+keyboard.bindValue('d', v => controls.lookRight = v);
+keyboard.bindValue('w', v => controls.lookUp = v);
+keyboard.bindValue('s', v => controls.lookDown = v);
 keyboard.bindValue(' ', () => {
     const x = camera.x;
     const y = camera.y;
@@ -52,6 +60,11 @@ setInterval(() => {
     controls.right && camera.x++;
     controls.forward && camera.y++;
     controls.backward && camera.y--;
+    
+    controls.lookLeft && camera.pitch--;
+    controls.lookRight && camera.pitch++;
+    controls.lookUp && camera.yaw++;
+    controls.lookDown && camera.yaw--;
     
     const minHeight = terrain.getPoint(Math.floor(camera.x), Math.floor(camera.y)).altitude + 20;
     
