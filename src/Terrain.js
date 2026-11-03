@@ -44,8 +44,8 @@ class Terrain {
 
         for (let rayDepth = minRayDepth; rayDepth < maxRayDepth; rayDepth += rayDepthOffset) {
 
-            const leftPoint = findEdgePoint(camera.x, camera.y, rayDepth, camera.yaw - (camera.fov/2);
-            const rightPoint = findEdgePoint(camera.x, camera.y, rayDepth, camera.yaw + (camera.fov/2);
+            const leftPoint = findEdgePoint(camera.x, camera.y, rayDepth, camera.yaw - (camera.fov/2));
+            const rightPoint = findEdgePoint(camera.x, camera.y, rayDepth, camera.yaw + (camera.fov/2));
 
             const rayWidth = rightPoint.x - leftPoint.x;
 
