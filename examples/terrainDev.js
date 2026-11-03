@@ -61,10 +61,10 @@ setInterval(() => {
     controls.forward && camera.y++;
     controls.backward && camera.y--;
     
-    controls.lookLeft && camera.pitch--;
-    controls.lookRight && camera.pitch++;
-    controls.lookUp && camera.yaw++;
-    controls.lookDown && camera.yaw--;
+    controls.lookLeft && camera.yaw--;
+    controls.lookRight && camera.yaw++;
+    controls.lookUp && camera.pitch++;
+    controls.lookDown && camera.pitch--;
     
     const minHeight = terrain.getPoint(Math.floor(camera.x), Math.floor(camera.y)).altitude + 20;
     
