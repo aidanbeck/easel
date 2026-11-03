@@ -44,13 +44,15 @@ class Terrain {
 
         for (let rayDepth = minRayDepth; rayDepth < maxRayDepth; rayDepth += rayDepthOffset) {
 
-            const leftPoint = findEdgePoint(camera.x, camera.y, rayDepth, camera.yaw - (camera.fov/2));
-            const rightPoint = findEdgePoint(camera.x, camera.y, rayDepth, camera.yaw + (camera.fov/2));
+            const midPoint = this.getPerspectiveEdgePoint(camera.x, camera.y, camera.yaw, rayDepth + 10);
+            const leftPoint = this.getPerspectiveEdgePoint(midPoint.x, midPoint.y, camera.yaw - 90, rayDepth);
+            const rightPoint = this.getPerspectiveEdgePoint(midPoint.x, midPoint.y, camera.yaw + 90, rayDepth);
 
             const rayWidth = rightPoint.x - leftPoint.x;
+            const rayHeight = rightPoint.y - leftPoint.y;
 
             let xOffset = rayWidth / theatre.canvas.width;
-            let yOffset = 0; // assumes straight line
+            let yOffset = rayHeight / theatre.canvas.height;
 
             this.drawRay(leftPoint.x, leftPoint.y, xOffset, yOffset, theatre, highestYs, rayDepth, camera);
 
@@ -87,7 +89,7 @@ class Terrain {
         ctx.fillRect(x, y, 1, height);
     }
 
-    getEdgePoint(x, y, angle, distance) {
+    getPerspectiveEdgePoint(x, y, angle, distance) {
         return {
             x: Math.round(Math.cos(angle * Math.PI / 180) * distance + x),
             y: Math.round(Math.sin(angle * Math.PI / 180) * distance + y)
