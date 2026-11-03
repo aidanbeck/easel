@@ -44,15 +44,8 @@ class Terrain {
 
         for (let rayDepth = minRayDepth; rayDepth < maxRayDepth; rayDepth += rayDepthOffset) {
 
-            const leftPoint = {
-                x: camera.x - rayDepth,
-                y: camera.y + 10 + rayDepth
-            }
-
-            const rightPoint = {
-                x: camera.x + rayDepth,
-                y: camera.y + 10 + rayDepth
-            }
+            const leftPoint = findEdgePoint(camera.x, camera.y, rayDepth, camera.yaw - (camera.fov/2);
+            const rightPoint = findEdgePoint(camera.x, camera.y, rayDepth, camera.yaw + (camera.fov/2);
 
             const rayWidth = rightPoint.x - leftPoint.x;
 
@@ -92,6 +85,13 @@ class Terrain {
     drawPillar(x, y, height, color, ctx) {
         ctx.fillStyle = color;
         ctx.fillRect(x, y, 1, height);
+    }
+
+    getEdgePoint(x, y, angle, distance) {
+        return {
+            x: Math.round(Math.cos(angle * Math.PI / 180) * distance + x),
+            y: Math.round(Math.sin(angle * Math.PI / 180) * distance + y)
+        };
     }
 }
 
