@@ -1,5 +1,5 @@
 /*
-    This is a sandbox for testing new Easel modules.
+    This is an example of a first person controller demonstrating Terrain.js
 */
 
 import Theatre from '../src/Theatre.js';
@@ -61,10 +61,10 @@ setInterval(() => {
     controls.forward && camera.y++;
     controls.backward && camera.y--;
     
-    controls.lookLeft && camera.yaw--;
-    controls.lookRight && camera.yaw++;
-    controls.lookUp && camera.pitch++;
-    controls.lookDown && camera.pitch--;
+    if (controls.lookLeft) { camera.yaw -= 3; }
+    if (controls.lookRight) { camera.yaw += 3; }
+    if (controls.lookUp) { camera.pitch += 3; }
+    if (controls.lookDown) { camera.pitch -= 3; }
     
     const minHeight = terrain.getPoint(Math.floor(camera.x), Math.floor(camera.y)).altitude + 20;
     
