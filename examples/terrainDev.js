@@ -12,13 +12,11 @@ const theatre = new Theatre(canvasElement, 256, 256);
 // theatre.origin = "CENTER";
 theatre.makeFullScreen();
 theatre.shorterDimensionConsistent = true;
-theatre.canvas.style.backgroundColor = "rgb(255, 255, 255)";
+theatre.canvas.style.backgroundColor = "rgb(150, 200, 255)";
 theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
 theatre.redraw = () => {
     theatre.ctx.clearRect(0, 0, 1000, 1000);
-    // theatre.ctx.drawImage(colorImage, 0, 0);
     terrain.drawRays(camera, theatre, 800, 1);
-    theatre.ctx.fillRect(camera.x/4 - 2, camera.y/4 - 2, 3, 3); // draw camera position;
 };
 
 // Interaction

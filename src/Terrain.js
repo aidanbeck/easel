@@ -44,15 +44,15 @@ class Terrain {
 
         for (let rayDepth = minRayDepth; rayDepth < maxRayDepth; rayDepth += rayDepthOffset) {
 
-            const midPoint = this.getPerspectiveEdgePoint(camera.x, camera.y, camera.yaw, rayDepth + 10);
-            const leftPoint = this.getPerspectiveEdgePoint(midPoint.x, midPoint.y, camera.yaw - 90, rayDepth);
-            const rightPoint = this.getPerspectiveEdgePoint(midPoint.x, midPoint.y, camera.yaw + 90, rayDepth);
+            const halfFOV = camera.fov / 2
+            const leftPoint = this.getPerspectiveEdgePoint(camera.x, camera.y, camera.yaw - halfFOV, rayDepth);
+            const rightPoint = this.getPerspectiveEdgePoint(camera.x, camera.y, camera.yaw + halfFOV, rayDepth);
 
             const rayWidth = rightPoint.x - leftPoint.x;
             const rayHeight = rightPoint.y - leftPoint.y;
 
             let xOffset = rayWidth / theatre.canvas.width;
-            let yOffset = rayHeight / theatre.canvas.height;
+            let yOffset = rayHeight / theatre.canvas.width;
 
             this.drawRay(leftPoint.x, leftPoint.y, xOffset, yOffset, theatre, highestYs, rayDepth, camera);
 
@@ -63,6 +63,12 @@ class Terrain {
     drawRay(x, y, xOffset, yOffset, theatre, highestYs, rayDepth, camera) {
         
         for (let i = 0; i < theatre.canvas.width; i++) {
+
+            if (x < 0 || x > this.width || y < 0 || y > this.height) { // don't render if off grid
+                x += xOffset;
+                y += yOffset;
+                continue;
+            }
 
             const terrainPoint = this.getPoint( Math.floor(x), Math.floor(y));
             const color = terrainPoint.color;
@@ -91,8 +97,8 @@ class Terrain {
 
     getPerspectiveEdgePoint(x, y, angle, distance) {
         return {
-            x: Math.round(Math.cos(angle * Math.PI / 180) * distance + x),
-            y: Math.round(Math.sin(angle * Math.PI / 180) * distance + y)
+            x: Math.cos(angle * Math.PI / 180) * distance + x,
+            y: Math.sin(angle * Math.PI / 180) * distance + y
         };
     }
 }
