@@ -8,7 +8,7 @@ export default class Messenger {
 		this.recieveMessage = this.recieveMessage.bind(this); // makes 'this' refers to Client, not socket
 		this.socket.addEventListener("message", this.recieveMessage);
 		this.socket.addEventListener("error", (e) => {console.log(e)} );
-		this.socket.addEventListener("close", console.log("socket closed") );
+		this.socket.addEventListener("close", console.log("socket closed.") );
 	}
 
 	async fetch(method, body) {

@@ -1,25 +1,32 @@
-import { json } from 'node:stream/consumers';
 import Switchboard from './src/Switchboard.js';
 import { WebSocketServer } from 'ws';
 
 const wss = new WebSocketServer({port: 8080});
 const switchboard = new Switchboard();
-switchboard.addHandler("chatMessage", (data) => console.log(`<${data.username}>: ${data.chatContent}`) );
 
 wss.on("connection", (socket) => {
+
+	// Onboard
+	const sessionId = switchboard.addSocket(socket);
+	socket.send(JSON.stringify({type: "chatMessage", username: "Server", chatContent: "Welcome!" }));
 	console.log("client connected.");
 
-	socket.send(JSON.stringify({
-		type: "chatMessage",
-		username: "aidanbeck",
-		chatContent: "Hello World!"
-	}));
-	
-
+	// Listeners
+	socket.on("close", () => { console.log("client closed.")});
 	socket.on("message", (data) => {
-		console.log(data.toString());
-		switchboard.recieveMessage(data.toString());
+		switchboard.recieveMessage(data.toString()); // should recieveMessage handle this? probably.
 	});
 
-	socket.on("close", () => { console.log("client closed.")});
+});
+
+// Handlers
+switchboard.addHandler("chatMessage", (data) => {
+
+	console.log(`<${data.username}>: ${data.chatContent}`);
+	
+	switchboard.sendMessageToAll({
+		type: "chatMessage",
+		username: data.username,
+		chatContent: data.chatContent
+	});
 });

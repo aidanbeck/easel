@@ -27,10 +27,17 @@ export default class Switchboard {
 		this.messageHandlers.set(type, handler)
 	}
 
+	addSocket(socket) {
+		const sessionId = crypto.randomUUID();
+		this.sockets.set(sessionId, socket);
+		return sessionId;
+	}
+
 	recieveMessage(data) {
 		const message = JSON.parse(data);
 		const type = message.type;
-		this.messageHandlers[type](message);
+		const handler = this.messageHandlers.get(type);
+		handler(message);
 	}
 
 	async fetch(request) {
