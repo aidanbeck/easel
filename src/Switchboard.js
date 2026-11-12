@@ -34,7 +34,7 @@ export default class Switchboard {
 	}
 
 	recieveMessage(data) {
-		const message = JSON.parse(data);
+		const message = JSON.parse(data.toString());
 		const type = message.type;
 		const handler = this.messageHandlers.get(type);
 		handler(message);

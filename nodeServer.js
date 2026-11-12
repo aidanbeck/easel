@@ -8,15 +8,12 @@ wss.on("connection", (socket) => {
 
 	// Onboard
 	const sessionId = switchboard.addSocket(socket);
-	socket.send(JSON.stringify({type: "chatMessage", username: "Server", chatContent: "Welcome!" }));
 	console.log("client connected.");
-
+	switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
+	
 	// Listeners
-	socket.on("close", () => { console.log("client closed.")});
-	socket.on("message", (data) => {
-		switchboard.recieveMessage(data.toString()); // should recieveMessage handle this? probably.
-	});
-
+	socket.on("close", () => console.log("client closed."));
+	socket.on("message", switchboard.recieveMessage);
 });
 
 // Handlers
