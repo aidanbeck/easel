@@ -20,7 +20,7 @@ function printMessage(text) {
 
 // Open Socket
 const username = prompt("What is your username?", "Unknown");
-let sessionId; // TODO handle naturally in Messenger.js
+let sessionId;
 
 // Send Message
 input.onkeyup = (event) => {

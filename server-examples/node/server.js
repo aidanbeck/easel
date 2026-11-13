@@ -9,7 +9,7 @@ wss.on("connection", (socket) => {
 	// Onboard
 	console.log("client connected.");
 	const sessionId = switchboard.addSocket(socket);
-	switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
+	switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Node Server", chatContent: "Welcome!" });
 });
 
 // Custom Handlers

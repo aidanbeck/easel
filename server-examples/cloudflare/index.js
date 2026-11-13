@@ -31,7 +31,7 @@ export class DurableExample extends DurableObject {
 		// Add Socket to Switchboard
         const sessionId = this.switchboard.addSocket(server);
 
-        this.switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
+        this.switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Cloudflare Worker", chatContent: "Welcome!" });
 
         return new Response(null, {
             status: 101,
