@@ -9,5 +9,8 @@
                 "class_name": "DurableExample"
             }
         ]
+    },
+    "observability": {
+        "enabled": true
     }
 }
