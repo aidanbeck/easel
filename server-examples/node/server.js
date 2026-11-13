@@ -7,13 +7,9 @@ const switchboard = new Switchboard();
 wss.on("connection", (socket) => {
 
 	// Onboard
-	const sessionId = switchboard.addSocket(socket);
 	console.log("client connected.");
+	const sessionId = switchboard.addSocket(socket);
 	switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
-	
-	// Listeners
-	socket.on("close", () => console.log("client closed."));
-	socket.on("message", switchboard.recieveMessage);
 });
 
 // Custom Handlers

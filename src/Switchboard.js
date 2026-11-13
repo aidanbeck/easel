@@ -6,6 +6,7 @@ export default class Switchboard {
 		this.messageHandlers = new Map();
 		
 		this.recieveMessage = this.recieveMessage.bind(this);
+		this.removeSocket = this.removeSocket.bind(this);
 	}
 	
 	sendMessage(sessionId, data) {
@@ -30,7 +31,19 @@ export default class Switchboard {
 	addSocket(socket) {
 		const sessionId = crypto.randomUUID();
 		this.sockets.set(sessionId, socket);
+		
+		// Add Listeners
+		socket.addEventListener("message", (event) => { this.recieveMessage(event.data)} );
+		socket.addEventListener("close", () => { this.removeSocket(sessionId)} );
+
+		// Send Token
+		this.sendMessage(sessionId, { type: "connected", sessionId: sessionId });
+
 		return sessionId;
+	}
+
+	removeSocket(sessionId) {
+		this.sockets.delete(sessionId);
 	}
 
 	recieveMessage(data) {

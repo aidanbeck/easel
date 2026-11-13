@@ -10,7 +10,6 @@ export class DurableExample extends DurableObject {
 		super(ctx, env);
 		this.switchboard = new Switchboard();
         addChatHandlers(this.switchboard);
-		console.log(this.switchboard.messageHandlers);
 	}
 
 	async sayHello(name) {
@@ -28,19 +27,9 @@ export class DurableExample extends DurableObject {
         const pair = new WebSocketPair();
         const [client, server] = Object.values(pair);
         server.accept();
-		
-		server.addEventListener("message", (event) => {
-			this.switchboard.recieveMessage(event.data);
-		});
 
 		// Add Socket to Switchboard
         const sessionId = this.switchboard.addSocket(server);
-
-        // Token & Welcome Message
-		this.switchboard.sendMessage(sessionId, {
-			type: "connected",
-			sessionId: sessionId
-		});
 
         this.switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
 
