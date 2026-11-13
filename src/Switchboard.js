@@ -42,12 +42,9 @@ export default class Switchboard {
 
 	async fetch(request) {
 		
-		// if (request.headers.get("Upgrade") === "websocket") { return await this.handleWebSocket(); } // no longer in this class
-		
-		const body = await request.json();
 		const response = {}; // !!! Get response from fetchHandlers
 		
-		return new Response( JSON.stringify(response), { headers: { // !!! Modifiable Headers
+		return new Response(JSON.stringify(response), { headers: {
 			"Content-Type": "application/json",
 			"Access-Control-Allow-Origin": "*",
 			"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
