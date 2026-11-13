@@ -12,15 +12,11 @@ export class DurableExample extends DurableObject {
         addChatHandlers(this.switchboard);
 	}
 
-	async sayHello(name) {
-		return `Hello, ${name}!`;
-	}
-
 	async fetch(request) {
         if (request.headers.get("Upgrade") === "websocket") {
             return this.handleWebSocket(request);
         }
-        return await this.switchboard.fetch(request); // let switchboard handle non-socket requests. good idea?
+        return new Reponse(); // !!!
     }
 
 	async handleWebSocket(request) {

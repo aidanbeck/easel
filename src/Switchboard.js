@@ -53,16 +53,4 @@ export default class Switchboard {
 		const handler = this.messageHandlers.get(type);
 		handler(message);
 	}
-
-	async fetch(request) {
-		
-		const response = {}; // !!! Get response from fetchHandlers
-		
-		return new Response(JSON.stringify(response), { headers: {
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Origin": "*",
-			"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-			"Access-Control-Allow-Headers": "Content-Type"
-		}});
-	}
 }
