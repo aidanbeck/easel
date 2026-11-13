@@ -37,7 +37,7 @@ export default class Switchboard {
 		socket.addEventListener("close", () => { this.removeSocket(sessionId)} );
 
 		// Send Token
-		this.sendMessage(sessionId, { type: "connected", sessionId: sessionId });
+		this.sendMessage(sessionId, { type: "sessionId", sessionId: sessionId });
 
 		return sessionId;
 	}
@@ -49,6 +49,7 @@ export default class Switchboard {
 	recieveMessage(data) {
 		const message = JSON.parse(data.toString());
 		const type = message.type;
+		const sessionId = message.sessionId;
 		const handler = this.messageHandlers.get(type);
 		handler(message);
 	}

@@ -3,7 +3,10 @@ export default class Messenger {
 		
 		this.serverURL = serverURL;
 		this.socket = new WebSocket(socketURL);
+		this.sessionId = "";
+
 		this.messageHandlers = {};
+		this.addHandler("sessionId", this.saveSessionId);
 		
 		this.recieveMessage = this.recieveMessage.bind(this); // makes 'this' refers to Client, not socket
 		this.socket.addEventListener("message", this.recieveMessage);
@@ -21,6 +24,7 @@ export default class Messenger {
 	}
 
 	sendMessage(data) {
+		data.sessionId = this.sessionId;
 		const message = JSON.stringify(data);
 		this.socket.send(message);
 	}
@@ -33,5 +37,10 @@ export default class Messenger {
 
 	addHandler(type, logic) {
 		this.messageHandlers[type] = logic;
+	}
+
+	saveSessionId(data) {
+		this.sessionId = data.sessionid;
+		// can also save to localstorage
 	}
 }

@@ -20,7 +20,7 @@ function printMessage(text) {
 
 // Open Socket
 const username = prompt("What is your username?", "Unknown");
-let sessionId; // TODO handle naturally between Switchboard & Messenger. Validate sessionId each request with type
+let sessionId; // TODO handle naturally in Messenger.js
 
 // Send Message
 input.onkeyup = (event) => {
