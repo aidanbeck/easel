@@ -4,6 +4,8 @@ import { WebSocketServer } from 'ws';
 const wss = new WebSocketServer({port: 8080});
 const switchboard = new Switchboard();
 
+const usernameIds = new Map();
+
 wss.on("connection", (socket) => {
 
 	// Onboard
@@ -14,6 +16,13 @@ wss.on("connection", (socket) => {
 
 // Custom Handlers
 switchboard.addHandler("chatMessage", (data) => {
+
+	const validatedUsername = usernameIds.get(data.sessionId);
+
+	if (data.username != validatedUsername) { 
+		console.log(`${data.username} ${validatedUsername}`);
+		return;
+	}
 
 	console.log(`<${data.username}>: ${data.chatContent}`);
 	
@@ -27,7 +36,8 @@ switchboard.addHandler("chatMessage", (data) => {
 switchboard.addHandler("joinMessage", (data) => {
 
 	console.log(`${data.username} joined the chat.`);
-	
+	usernameIds.set(data.sessionId, data.username);
+
 	switchboard.sendMessageToAll({
 		type: "joinMessage",
 		username: data.username

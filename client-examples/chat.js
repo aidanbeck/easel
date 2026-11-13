@@ -1,7 +1,7 @@
 import Messenger from '../src/Messenger.js';
 
-const messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/");
-// const messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/");
+// const messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/");
+const messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/");
 
 // HTML Structure
 const theatre = document.getElementById("theatre");
@@ -21,6 +21,7 @@ function printMessage(text) {
 // Open Socket
 const username = prompt("What is your username?", "Unknown");
 let sessionId;
+messenger.socket.onopen = () => messenger.sendMessage({ type: "joinMessage", username: username });
 
 // Send Message
 input.onkeyup = (event) => {
@@ -36,10 +37,6 @@ input.onkeyup = (event) => {
 }
 
 // Custom Handlers
-messenger.addHandler("connected", (data) => {
-	sessionId = data.sessionId;
-	messenger.sendMessage({ type: "joinMessage", username: username });
-});
 
 messenger.addHandler("chatMessage", (data) => {
 	printMessage(`<${data.username}>: ${data.chatContent}`);
