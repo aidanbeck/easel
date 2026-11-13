@@ -16,7 +16,7 @@ wss.on("connection", (socket) => {
 	socket.on("message", switchboard.recieveMessage);
 });
 
-// Handlers
+// Custom Handlers
 switchboard.addHandler("chatMessage", (data) => {
 
 	console.log(`<${data.username}>: ${data.chatContent}`);
@@ -25,5 +25,15 @@ switchboard.addHandler("chatMessage", (data) => {
 		type: "chatMessage",
 		username: data.username,
 		chatContent: data.chatContent
+	});
+});
+
+switchboard.addHandler("joinMessage", (data) => {
+
+	console.log(`${data.username} joined the chat.`);
+	
+	switchboard.sendMessageToAll({
+		type: "joinMessage",
+		username: data.username
 	});
 });

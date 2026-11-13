@@ -11,6 +11,7 @@ container.append(messages, input);
 theatre.replaceWith(container);
 
 const username = prompt("What is your username?", "Unknown");
+messenger.socket.onopen = () => messenger.sendMessage({ type: "joinMessage", username: username });
 
 input.onkeyup = (event) => {
 	if (event.key != "Enter") { return; }
@@ -24,8 +25,17 @@ input.onkeyup = (event) => {
 	input.value = "";
 }
 
+// Custom Handlers
 messenger.addHandler("chatMessage", (data) => {
-	const message = document.createElement("div");
-	message.innerText = `<${data.username}>: ${data.chatContent}`;
-	messages.append(message);
+	printMessage(`<${data.username}>: ${data.chatContent}`);
 });
+
+messenger.addHandler("joinMessage", (data) => {
+	printMessage(`${data.username} joined the chat.`);
+});
+
+function printMessage(text) {
+	const message = document.createElement("div");
+	message.textContent = text;
+	messages.append(message);
+}
