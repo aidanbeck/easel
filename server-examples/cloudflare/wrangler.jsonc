@@ -1,5 +1,13 @@
 {
     "name": "index",
     "compatibility_date": "2026-11-13",
-    "main": "index.js"
+    "main": "index.js",
+    "durable_objects": {
+        "bindings": [
+            {
+                "name": "MY_DURABLE_OBJECT",
+                "class_name": "MyDurableObject"
+            }
+        ]
+    }
 }

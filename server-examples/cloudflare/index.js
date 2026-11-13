@@ -1,3 +1,5 @@
+// boot with npx wrangler dev in the "cloudflare" directory.
+
 import { DurableObject } from "cloudflare:workers";
 
 /**
