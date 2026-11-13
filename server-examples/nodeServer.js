@@ -1,4 +1,4 @@
-import Switchboard from './src/Switchboard.js';
+import Switchboard from '../src/Switchboard.js';
 import { WebSocketServer } from 'ws';
 
 const wss = new WebSocketServer({port: 8080});

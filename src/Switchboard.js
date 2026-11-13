@@ -1,4 +1,4 @@
-// For use by servers, not clients.
+// This is the Switchboard module for Easel, used by servers to route websocket requests.
 
 export default class Switchboard {
 	constructor() {
@@ -42,7 +42,7 @@ export default class Switchboard {
 
 	async fetch(request) {
 		
-		if (request.headers.get("Upgrade") === "websocket") { return await this.handleWebSocket(); }
+		// if (request.headers.get("Upgrade") === "websocket") { return await this.handleWebSocket(); } // no longer in this class
 		
 		const body = await request.json();
 		const response = {}; // !!! Get response from fetchHandlers
@@ -54,35 +54,4 @@ export default class Switchboard {
 			"Access-Control-Allow-Headers": "Content-Type"
 		}});
 	}
-
-	async handleWebSocket() {
-		
-		const pair = new WebSocketPair(); // !!! Cloudflare worker specific
-		const [client, socketServer] = Object.values(pair);
-		socketServer.accept();
-		
-		const sessionId = crypto.randomUUID();
-		this.sockets[sessionId] = socketServer;
-		
-		socketServer.addEventListener("close", () => this.sockets.delete(socketServer) );
-		socketServer.addEventListener("error", () => this.sockets.delete(socketServer) );
-		socketServer.addEventListener("message", (event) => this.recieveMessage(event) );
-		
-		return new Response(null, { status: 101, webSocket: client });
-	}
-}
-
-async function handleCloudflareWebSocket(switchboard) {
-	const pair = new WebSocketPair();
-    const [client, server] = Object.values(pair);
-
-    server.accept();
-
-    const sessionId = crypto.randomUUID();
-    switchboard.addSocket(sessionId, server);
-
-    return new Response(null, {
-        status: 101,
-        webSocket: client
-    });
 }
