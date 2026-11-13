@@ -19,7 +19,7 @@ function printMessage(text) {
 
 // Open Socket
 const username = prompt("What is your username?", "Unknown");
-messenger.socket.onopen = () => messenger.sendMessage({ type: "joinMessage", username: username });
+let sessionId; // TODO handle naturally between Switchboard & Messenger. Validate sessionId each request with type
 
 // Send Message
 input.onkeyup = (event) => {
@@ -35,6 +35,11 @@ input.onkeyup = (event) => {
 }
 
 // Custom Handlers
+messenger.addHandler("connected", (data) => {
+	sessionId = data.sessionId;
+	messenger.sendMessage({ type: "joinMessage", username: username });
+});
+
 messenger.addHandler("chatMessage", (data) => {
 	printMessage(`<${data.username}>: ${data.chatContent}`);
 });
