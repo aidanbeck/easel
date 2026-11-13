@@ -1,5 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
-import Switchboard from '../src/Switchboard.js';
+import Switchboard from '../../src/Switchboard.js';
 
 /**
  * @typedef {Object} Env - reference bindings declared in wrangler.jsonc
