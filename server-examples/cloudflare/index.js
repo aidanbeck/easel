@@ -1,5 +1,3 @@
-// boot with `npx wrangler dev` in easel/server-examples/cloudflare/
-
 import { DurableObject } from "cloudflare:workers";
 import Switchboard from '../../src/Switchboard.js';
 import addChatHandlers from '../chat-server.js';
@@ -16,18 +14,15 @@ export class DurableExample extends DurableObject {
         if (request.headers.get("Upgrade") === "websocket") {
             return this.handleWebSocket(request);
         }
-        return new Reponse(); // !!!
+        return new Reponse();
     }
 
 	async handleWebSocket(request) {
         const pair = new WebSocketPair();
         const [client, server] = Object.values(pair);
         server.accept();
-
-		// Add Socket to Switchboard
-        const sessionId = this.switchboard.addSocket(server);
-
-        this.switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Cloudflare Worker", chatContent: "Welcome!" });
+        
+        this.switchboard.addSocket(server);
 
         return new Response(null, {
             status: 101,
@@ -37,9 +32,7 @@ export class DurableExample extends DurableObject {
 }
 
 export default {
-
 	async fetch(request, env, ctx) {
-
 		const stub = env.DURABLE_EXAMPLE.getByName("foo");
 		return stub.fetch(request);
 	},

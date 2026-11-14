@@ -5,8 +5,13 @@ export default function addChatHandlers(inputboard) {
 
     switchboard = inputboard;
 
+    switchboard.connectionHandler = welcomeMessage;
     switchboard.addHandler("chatMessage", chatMessage);
     switchboard.addHandler("joinMessage", joinMessage);
+}
+
+function welcomeMessage(sessionId) {
+    switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
 }
 
 function chatMessage(data) {

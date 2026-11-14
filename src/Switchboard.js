@@ -4,6 +4,7 @@ export default class Switchboard {
 	constructor() {
 		this.sockets = new Map();
 		this.messageHandlers = new Map();
+		this.connectionHandler = () => {};
 		
 		this.recieveMessage = this.recieveMessage.bind(this);
 		this.removeSocket = this.removeSocket.bind(this);
@@ -33,11 +34,12 @@ export default class Switchboard {
 		this.sockets.set(sessionId, socket);
 		
 		// Add Listeners
-		socket.addEventListener("message", (event) => { this.recieveMessage(event.data)} );
+		socket.addEventListener("message", (event) => { this.recieveMessage(event.data) });
 		socket.addEventListener("close", () => { this.removeSocket(sessionId)} );
 
 		// Send Token
 		this.sendMessage(sessionId, { type: "sessionId", sessionId: sessionId });
+		this.connectionHandler(sessionId);
 
 		return sessionId;
 	}
