@@ -1,10 +1,9 @@
-import Switchboard from '../../src/Switchboard.js';
 import { WebSocketServer } from 'ws';
+import Switchboard from '../../src/Switchboard.js';
+import addChatHandlers from '../chat-server.js';
 
 const wss = new WebSocketServer({port: 8080});
 const switchboard = new Switchboard();
-
-const usernameIds = new Map();
 
 wss.on("connection", (socket) => {
 
@@ -14,28 +13,4 @@ wss.on("connection", (socket) => {
 	switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Node Server", chatContent: "Welcome!" });
 });
 
-// Custom Handlers
-switchboard.addHandler("chatMessage", (data) => {
-
-	const validatedUsername = usernameIds.get(data.sessionId);
-	if (data.username != validatedUsername) { return; }
-
-	console.log(`<${data.username}>: ${data.chatContent}`);
-	
-	switchboard.sendMessageToAll({
-		type: "chatMessage",
-		username: data.username,
-		chatContent: data.chatContent
-	});
-});
-
-switchboard.addHandler("joinMessage", (data) => {
-
-	console.log(`${data.username} joined the chat.`);
-	usernameIds.set(data.sessionId, data.username);
-
-	switchboard.sendMessageToAll({
-		type: "joinMessage",
-		username: data.username
-	});
-});
+addChatHandlers(switchboard);

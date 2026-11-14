@@ -2,7 +2,7 @@
 
 import { DurableObject } from "cloudflare:workers";
 import Switchboard from '../../src/Switchboard.js';
-import addChatHandlers from './chatHandlers.js';
+import addChatHandlers from '../chat-server.js';
 
 export class DurableExample extends DurableObject {
 
