@@ -1,4 +1,5 @@
 let switchboard;
+const usernameIds = new Map();
 
 export default function addChatHandlers(inputboard) {
 
@@ -9,6 +10,10 @@ export default function addChatHandlers(inputboard) {
 }
 
 function chatMessage(data) {
+    
+    const validatedUsername = usernameIds.get(data.sessionId);
+	if (data.username != validatedUsername) { return; }
+
     console.log(`<${data.username}>: ${data.chatContent}`);
 	
 	switchboard.sendMessageToAll({
@@ -20,6 +25,7 @@ function chatMessage(data) {
 
 function joinMessage(data) {
     console.log(`${data.username} joined the chat.`);
+    usernameIds.set(data.sessionId, data.username);
     
     switchboard.sendMessageToAll({
         type: "joinMessage",

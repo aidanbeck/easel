@@ -18,11 +18,7 @@ wss.on("connection", (socket) => {
 switchboard.addHandler("chatMessage", (data) => {
 
 	const validatedUsername = usernameIds.get(data.sessionId);
-
-	if (data.username != validatedUsername) { 
-		console.log(`${data.username} ${validatedUsername}`);
-		return;
-	}
+	if (data.username != validatedUsername) { return; }
 
 	console.log(`<${data.username}>: ${data.chatContent}`);
 	
