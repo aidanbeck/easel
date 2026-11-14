@@ -1,7 +1,15 @@
 import Messenger from '../src/Messenger.js';
 
-// const messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/");
-const messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/");
+let messenger;
+const serverMode = prompt("Connect to NODE or WORKER?");
+if (serverMode == "NODE") {
+	messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/");
+	console.log("Connecting to Node server.");
+} else {
+	messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/");
+	console.log("Connecting to Cloudflare Worker.");
+
+}
 
 // HTML Structure
 const theatre = document.getElementById("theatre");
