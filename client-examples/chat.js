@@ -25,7 +25,7 @@ function printMessage(text) {
 
 // Open Socket
 let username = prompt("What is your username?", "Unknown");
-messenger.onConnection = () => {
+messenger.connectionHandler = () => {
 	messenger.sendMessage({ type: "joinMessage", sessionId: messenger.sessionId, username: username });
 }
 

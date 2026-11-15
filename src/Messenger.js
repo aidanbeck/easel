@@ -1,18 +1,22 @@
 export default class Messenger {
-	constructor(serverURL, socketURL, onConnection = () => {}) {
+	constructor(serverURL, socketURL) {
 		
 		this.serverURL = serverURL;
 		this.socket = new WebSocket(socketURL);
 		this.sessionId = "";
-		this.onConnection = onConnection;
+		this.connectionHandler = () => {};
 
 		this.messageHandlers = {};
-		this.addHandler("sessionId", this.saveSessionId.bind(this));
 		
 		this.recieveMessage = this.recieveMessage.bind(this); // makes 'this' refers to Client, not socket
 		this.socket.addEventListener("message", this.recieveMessage);
 		this.socket.addEventListener("error", (e) => {console.log(e)} );
 		this.socket.addEventListener("close", console.log("socket closed.") );
+
+		this.addHandler("sessionId", (data) => { // Default sessionId Handler
+			this.sessionId = data.sessionId; // Save sessionId
+			this.connectionHandler(); // Trigger Connection Handler
+		});
 	}
 
 	async fetch(method, body) {
@@ -38,10 +42,5 @@ export default class Messenger {
 
 	addHandler(type, logic) {
 		this.messageHandlers[type] = logic;
-	}
-
-	saveSessionId(data) {
-		this.sessionId = data.sessionId;
-		this.onConnection();
 	}
 }
