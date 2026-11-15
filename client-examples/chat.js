@@ -24,9 +24,10 @@ function printMessage(text) {
 }
 
 // Open Socket
-const username = prompt("What is your username?", "Unknown");
-let sessionId;
-messenger.socket.onopen = () => messenger.sendMessage({ type: "joinMessage", username: username });
+let username = prompt("What is your username?", "Unknown");
+messenger.onConnection = () => {
+	messenger.sendMessage({ type: "joinMessage", sessionId: messenger.sessionId, username: username });
+}
 
 // Send Message
 input.onkeyup = (event) => {
@@ -34,6 +35,7 @@ input.onkeyup = (event) => {
 
 	messenger.sendMessage({
 		type: "chatMessage",
+		sessionId: messenger.sessionId,
 		username: username,
 		chatContent: input.value
 	});

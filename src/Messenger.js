@@ -1,12 +1,13 @@
 export default class Messenger {
-	constructor(serverURL, socketURL) {
+	constructor(serverURL, socketURL, onConnection = () => {}) {
 		
 		this.serverURL = serverURL;
 		this.socket = new WebSocket(socketURL);
 		this.sessionId = "";
+		this.onConnection = onConnection;
 
 		this.messageHandlers = {};
-		this.addHandler("sessionId", this.saveSessionId);
+		this.addHandler("sessionId", this.saveSessionId.bind(this));
 		
 		this.recieveMessage = this.recieveMessage.bind(this); // makes 'this' refers to Client, not socket
 		this.socket.addEventListener("message", this.recieveMessage);
@@ -40,7 +41,7 @@ export default class Messenger {
 	}
 
 	saveSessionId(data) {
-		this.sessionId = data.sessionid;
-		// can also save to localstorage
+		this.sessionId = data.sessionId;
+		this.onConnection();
 	}
 }
