@@ -15,7 +15,7 @@ export default class ChatServer {
     }
 
     welcomeMessage = (sessionId) => {
-        this.switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
+        this.switchboard.sendMessage(sessionId, {type: "chatMessage", username: this.serverName, chatContent: "Welcome!" });
     }
 
     chatMessage = (data) => {
