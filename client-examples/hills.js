@@ -17,6 +17,10 @@ theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
 theatre.redraw = () => {
     theatre.ctx.clearRect(0, 0, 1000, 1000);
     terrain.drawRays(camera, theatre, 800, 1);
+
+    theatre.ctx.fillStyle = "black";
+    theatre.ctx.fillText("Rotate View: WASD", 20, 20);
+    theatre.ctx.fillText("Move Position: ←↑→↓", 20, 40);
 };
 
 // Interaction
@@ -79,8 +83,8 @@ setInterval(() => {
 const camera = new Camera(0, 0, 50, 50, 0, 90);
 const terrain = new Terrain(1024, 1024);
 
-const colorImage = new Image(); colorImage.src = './examples/media/C1W.png';
-const altitudeImage = new Image(); altitudeImage.src = './examples/media/D1.png';
+const colorImage = new Image(); colorImage.src = './client-examples/media/C1W.png';
+const altitudeImage = new Image(); altitudeImage.src = './client-examples/media/D1.png';
 
 colorImage.onload = () => {
 
