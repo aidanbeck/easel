@@ -19,8 +19,8 @@ theatre.redraw = () => {
     terrain.drawRays(camera, theatre, 800, 1);
 
     theatre.ctx.fillStyle = "black";
-    theatre.ctx.fillText("Rotate View: WASD", 20, 20);
-    theatre.ctx.fillText("Move Position: ←↑→↓", 20, 40);
+    theatre.ctx.fillText("Move: WASD", 20, 20);
+    theatre.ctx.fillText("Rotate: Arrow Keys", 20, 40);
 };
 
 // Interaction
@@ -32,30 +32,20 @@ const controls = {
     lookLeft: false,
     lookRight: false,
     lookUp: false,
-    lookDown: false
+    lookDown: false,
+    build: false
 }
 
 const keyboard = new Keyboard();
-keyboard.bindValue('ArrowLeft', v => controls.left = v);
-keyboard.bindValue('ArrowRight', v => controls.right = v);
-keyboard.bindValue('ArrowUp', v => controls.forward = v);
-keyboard.bindValue('ArrowDown', v => controls.backward = v);
-keyboard.bindValue('a', v => controls.lookLeft = v);
-keyboard.bindValue('d', v => controls.lookRight = v);
-keyboard.bindValue('w', v => controls.lookUp = v);
-keyboard.bindValue('s', v => controls.lookDown = v);
-keyboard.bindValue(' ', () => {
-    const x = camera.x;
-    const y = camera.y;
-    const newAltitude = terrain.getPoint(x, y).altitude + 10;
-    const newColor = terrain.getPoint(1024 - x, 1024 - y).color;
-
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
-            terrain.setPoint(x - 5 + i, y - 5 + j, newAltitude, newColor);
-        }
-    }
-});
+keyboard.bindValue('ArrowLeft', v => controls.lookLeft = v);
+keyboard.bindValue('ArrowRight', v => controls.lookRight = v);
+keyboard.bindValue('ArrowUp', v => controls.lookUp = v);
+keyboard.bindValue('ArrowDown', v => controls.lookDown = v);
+keyboard.bindValue('a', v => controls.left = v);
+keyboard.bindValue('d', v => controls.right = v);
+keyboard.bindValue('w', v => controls.forward = v);
+keyboard.bindValue('s', v => controls.backward = v);
+keyboard.bindValue(' ', v => controls.build = v);
 
 setInterval(() => {
     controls.left && camera.strafe(-1);
@@ -67,6 +57,19 @@ setInterval(() => {
     if (controls.lookRight) { camera.yaw += 3; }
     if (controls.lookUp) { camera.pitch += 3; }
     if (controls.lookDown) { camera.pitch -= 3; }
+
+    if (controls.build) {
+        const x = Math.floor(camera.x);
+        const y = Math.floor(camera.y);
+        const newAltitude = terrain.getPoint(x, y).altitude + 1;
+        const newColor = terrain.getPoint(1024 - x, 1024 - y).color;
+
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                terrain.setPoint(x - 5 + i, y - 5 + j, newAltitude, newColor);
+            }
+        }
+    }
     
     const minHeight = terrain.getPoint(Math.floor(camera.x), Math.floor(camera.y)).altitude + 20;
     
