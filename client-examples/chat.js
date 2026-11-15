@@ -4,11 +4,8 @@ let messenger;
 const serverMode = prompt("Connect to NODE or WORKER?");
 if (serverMode == "NODE") {
 	messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/");
-	console.log("Connecting to Node server.");
 } else {
 	messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/");
-	console.log("Connecting to Cloudflare Worker.");
-
 }
 
 // HTML Structure
@@ -45,11 +42,5 @@ input.onkeyup = (event) => {
 }
 
 // Custom Handlers
-
-messenger.addHandler("chatMessage", (data) => {
-	printMessage(`<${data.username}>: ${data.chatContent}`);
-});
-
-messenger.addHandler("joinMessage", (data) => {
-	printMessage(`${data.username} joined the chat.`);
-});
+messenger.addHandler("chatMessage", (data) => printMessage(`<${data.username}>: ${data.chatContent}`) );
+messenger.addHandler("joinMessage", (data) => printMessage(`${data.username} joined the chat.`) );
