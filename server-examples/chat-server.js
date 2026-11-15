@@ -1,39 +1,44 @@
-let switchboard;
-const usernameIds = new Map();
+import Switchboard from '../src/Switchboard.js';
 
-export default function addChatHandlers(inputboard) {
+export default class ChatServer {
 
-    switchboard = inputboard;
+    constructor(serverName) {
+        
+        this.switchboard = new Switchboard();
 
-    switchboard.connectionHandler = welcomeMessage;
-    switchboard.addHandler("chatMessage", chatMessage);
-    switchboard.addHandler("joinMessage", joinMessage);
-}
+        this.serverName = serverName;
+        this.usernameIds = new Map();
 
-function welcomeMessage(sessionId) {
-    switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
-}
+        this.switchboard.connectionHandler = this.welcomeMessage.bind(this);
+        this.switchboard.addHandler("chatMessage", this.chatMessage.bind(this));
+        this.switchboard.addHandler("joinMessage", this.joinMessage.bind(this));
+    }
 
-function chatMessage(data) {
-    
-    const validatedUsername = usernameIds.get(data.sessionId);
-	if (data.username != validatedUsername) { return; }
+    welcomeMessage(sessionId) {
+        this.switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
+    }
 
-    console.log(`<${data.username}>: ${data.chatContent}`);
-	
-	switchboard.sendMessageToAll({
-		type: "chatMessage",
-		username: data.username,
-		chatContent: data.chatContent
-	});
-}
+    chatMessage(data) {
+        
+        const validatedUsername = this.usernameIds.get(data.sessionId);
+        if (data.username != validatedUsername) { return; }
 
-function joinMessage(data) {
-    console.log(`${data.username} joined the chat.`);
-    usernameIds.set(data.sessionId, data.username);
-    
-    switchboard.sendMessageToAll({
-        type: "joinMessage",
-        username: data.username
-    });
+        console.log(`<${data.username}>: ${data.chatContent}`);
+        
+        this.switchboard.sendMessageToAll({
+            type: "chatMessage",
+            username: data.username,
+            chatContent: data.chatContent
+        });
+    }
+
+    joinMessage(data) {
+        console.log(`${data.username} joined the chat.`);
+        this.usernameIds.set(data.sessionId, data.username);
+        
+        this.switchboard.sendMessageToAll({
+            type: "joinMessage",
+            username: data.username
+        });
+    }
 }

@@ -1,11 +1,6 @@
 import { WebSocketServer } from 'ws';
-import Switchboard from '../../src/Switchboard.js';
-import addChatHandlers from '../chat-server.js';
+import ChatServer from '../chat-server.js';
 
 const wss = new WebSocketServer({port: 8080});
-const switchboard = new Switchboard();
-
-// Custom Logic
-addChatHandlers(switchboard);
-
-wss.on("connection", (socket) => switchboard.addSocket(socket) );
+const chatServer = new ChatServer("Node Server");
+wss.on("connection", (socket) => chatServer.switchboard.addSocket(socket) ); // add socket to chatServer

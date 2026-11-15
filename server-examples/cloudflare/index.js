@@ -1,13 +1,11 @@
 import { DurableObject } from "cloudflare:workers";
-import Switchboard from '../../src/Switchboard.js';
-import addChatHandlers from '../chat-server.js';
+import ChatServer from "../chat-server.js";
 
 export class DurableExample extends DurableObject {
 
 	constructor(ctx, env) {
 		super(ctx, env);
-		this.switchboard = new Switchboard();
-        addChatHandlers(this.switchboard);
+		this.chatServer = new ChatServer("Cloudflare Worker");
 	}
 
 	async fetch(request) {
@@ -22,7 +20,7 @@ export class DurableExample extends DurableObject {
         const [client, server] = Object.values(pair);
         server.accept();
         
-        this.switchboard.addSocket(server);
+        this.chatServer.switchboard.addSocket(server); // add socket to chatServer
 
         return new Response(null, {
             status: 101,
