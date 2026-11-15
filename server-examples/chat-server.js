@@ -9,16 +9,16 @@ export default class ChatServer {
         this.serverName = serverName;
         this.usernameIds = new Map();
 
-        this.switchboard.connectionHandler = this.welcomeMessage.bind(this);
-        this.switchboard.addHandler("chatMessage", this.chatMessage.bind(this));
-        this.switchboard.addHandler("joinMessage", this.joinMessage.bind(this));
+        this.switchboard.connectionHandler = this.welcomeMessage;
+        this.switchboard.addHandler("chatMessage", this.chatMessage);
+        this.switchboard.addHandler("joinMessage", this.joinMessage);
     }
 
-    welcomeMessage(sessionId) {
+    welcomeMessage = (sessionId) => {
         this.switchboard.sendMessage(sessionId, {type: "chatMessage", username: "Server", chatContent: "Welcome!" });
     }
 
-    chatMessage(data) {
+    chatMessage = (data) => {
         
         const validatedUsername = this.usernameIds.get(data.sessionId);
         if (data.username != validatedUsername) { return; }
@@ -32,7 +32,7 @@ export default class ChatServer {
         });
     }
 
-    joinMessage(data) {
+    joinMessage = (data) => {
         console.log(`${data.username} joined the chat.`);
         this.usernameIds.set(data.sessionId, data.username);
         
