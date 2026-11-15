@@ -58,10 +58,10 @@ keyboard.bindValue(' ', () => {
 });
 
 setInterval(() => {
-    controls.left && camera.x--;
-    controls.right && camera.x++;
-    controls.forward && camera.y++;
-    controls.backward && camera.y--;
+    controls.left && camera.strafe(-1);
+    controls.right && camera.strafe(1);
+    controls.forward && camera.move(1);
+    controls.backward && camera.move(-1);
     
     if (controls.lookLeft) { camera.yaw -= 3; }
     if (controls.lookRight) { camera.yaw += 3; }

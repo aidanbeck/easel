@@ -7,6 +7,16 @@ class Camera {
         this.yaw = yaw; // left and right
         this.fov = fov;
     }
+
+    move(distance) {
+        this.x = Math.cos(this.yaw * Math.PI / 180) * distance + this.x,
+        this.y = Math.sin(this.yaw * Math.PI / 180) * distance + this.y
+    }
+
+    strafe(distance) {
+        this.x = Math.cos((this.yaw + 90) * Math.PI / 180) * distance + this.x,
+        this.y = Math.sin((this.yaw + 90) * Math.PI / 180) * distance + this.y
+    }
 }
 
 class Terrain {
