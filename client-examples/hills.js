@@ -83,7 +83,7 @@ setInterval(() => {
 
 
 // Terrain
-const camera = new Camera(0, 0, 50, 50, 0, 90);
+const camera = new Camera(1024/2, 1024/2, 0, 50, 0, 90);
 const terrain = new Terrain(1024, 1024);
 
 const colorImage = new Image(); colorImage.src = './client-examples/media/C1W.png';
