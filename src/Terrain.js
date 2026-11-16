@@ -31,14 +31,6 @@ class Terrain {
         return y * this.width + x;
     }
 
-    getPoint(x, y) {
-        const index = this.getPointIndex(x, y);
-        return {
-            altitude: this.altitudeMap[index],
-            color: this.colorMap[index]
-        }
-    }
-
     setPoint(x, y, altitude, color) {
         const index = this.getPointIndex(x, y);
 
@@ -80,9 +72,9 @@ class Terrain {
                 continue;
             }
 
-            const terrainPoint = this.getPoint( Math.floor(x), Math.floor(y));
-            const color = terrainPoint.color;
-            const altitude = terrainPoint.altitude;
+            const pointIndex = this.getPointIndex(Math.floor(x), Math.floor(y));
+            const color = this.colorMap[pointIndex];
+            const altitude = this.altitudeMap[pointIndex];
 
             let scale = 1 / rayDepth * 150; // 300 is the vertical scaling number. 240 was use in s-macke's demo.
             let heightOnScreen = (camera.z - altitude) * scale + camera.pitch;
