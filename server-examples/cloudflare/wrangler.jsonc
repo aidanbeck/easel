@@ -10,6 +10,12 @@
             }
         ]
     },
+    "exports": {
+        "DurableExample": {
+            "type": "durable-object",
+            "storage": "sqlite"
+        }
+    },
     "observability": {
         "enabled": true
     }
