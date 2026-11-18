@@ -3,11 +3,13 @@ import Messenger from '../src/Messenger.js';
 let messenger = new Messenger("https://aidanbeck.com/api/chat", "wss://aidanbeck.com/api/chat"); // Cloudflare Worker or Node Server
 
 // HTML Structure
-const theatre = document.getElementById("theatre");
 const container = document.createElement("div");
 const messages = document.createElement("div");
-const input = document.createElement("input");
+const input = document.createElement("textarea");
 
+container.style.height = "100vh";
+container.style.overflow = "scroll";
+input.style.width = "25vw"; input.style.height = "5vw";
 container.append(messages, input);
 theatre.replaceWith(container);
 
