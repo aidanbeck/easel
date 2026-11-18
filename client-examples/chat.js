@@ -24,6 +24,9 @@ let username = prompt("What is your username?", "Unknown");
 messenger.connectionHandler = () => {
 	messenger.sendMessage({ type: "joinMessage", sessionId: messenger.sessionId, username: username });
 }
+messenger.disconnectionHandler = () => {
+	printMessage("Disconnected from server. Refresh to reconnect.");
+}
 
 // Send Message
 input.onkeyup = (event) => {
@@ -42,3 +45,5 @@ input.onkeyup = (event) => {
 // Custom Handlers
 messenger.addHandler("chatMessage", (data) => printMessage(`<${data.username}>: ${data.chatContent}`) );
 messenger.addHandler("joinMessage", (data) => printMessage(`${data.username} joined the chat.`) );
+
+globalThis.MESSENGER = messenger;

@@ -11,7 +11,7 @@
 
 [Layout](demo.html?layout) - a layout editor with collision detection leveraging the **Shapes** module.
 
-[Chat](demo.html?chat) = a chatroom leveraging the **Messenger** and **Switchboard** modules. (Not Deployed)
+[Chat](demo.html?chat) = a chatroom leveraging the **Messenger** and **Switchboard** modules.
 
 [Scene](demo.html?scene) - an interative page leveraging the **Card** module.
 
