@@ -7,12 +7,15 @@ let username = prompt("What is your name?", "Unknown");
 const messages = document.createElement("div");
 
 const input = document.createElement("textarea");
-input.style.width = "25vw";
-input.style.height = "5vw";
+input.style.width = "25em";
+input.style.height = "5em";
+input.style.marginTop = "0.5em";
+input.placeholder = "Hello world! (Hit 'Enter' to send.)"
 
 const container = document.createElement("div");
 container.style.height = "100vh";
 container.style.overflow = "scroll";
+container.style.padding = "0.5em";
 container.append(messages, input);
 
 theatre.replaceWith(container); // Inject into demo.htnml
