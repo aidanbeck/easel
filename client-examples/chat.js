@@ -1,12 +1,6 @@
 import Messenger from '../src/Messenger.js';
 
-let messenger;
-const serverMode = prompt("Connect to NODE or WORKER?");
-if (serverMode == "NODE") {
-	messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8080.app.github.dev/");
-} else {
-	messenger = new Messenger("https://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/", "wss://bug-free-computing-machine-5g5xw74g6773v6jp-8787.app.github.dev/");
-}
+let messenger = new Messenger("https://aidanbeck.com/api/chat", "wss://aidanbeck.com/api/chat"); // Cloudflare Worker or Node Server
 
 // HTML Structure
 const theatre = document.getElementById("theatre");

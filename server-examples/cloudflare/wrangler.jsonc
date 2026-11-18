@@ -1,5 +1,5 @@
 {
-    "name": "index",
+    "name": "chat",
     "compatibility_date": "2026-11-13",
     "main": "index.js",
     "durable_objects": {
