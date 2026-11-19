@@ -86,44 +86,10 @@ const camera = new Camera(1024/2, 1024/2, 0, 50, 0, 90);
 const terrain = new Terrain(1024, 1024);
 
 const colorImage = new Image(); colorImage.src = './client-examples/media/C1W.png';
+colorImage.onload = () => { terrain.loadColorFromImage(colorImage, "color"); }
+
 const altitudeImage = new Image(); altitudeImage.src = './client-examples/media/D1.png';
-
-colorImage.onload = () => { // This should be covered by Terrain module
-
-    const canvas = new OffscreenCanvas(1024, 1024);
-    const ctx = canvas.getContext("2d");
-
-    ctx.drawImage(colorImage, 0, 0);
-    const imageData = ctx.getImageData(0, 0, 1024, 1024).data;
-
-    for (let i = 0; i < imageData.length; i++) {
-
-        let indexNumber = Math.floor (i / 4);
-
-        let r = imageData[i]; i++;
-        let g = imageData[i]; i++;
-        let b = imageData[i]; i++;   
-
-        terrain.colorMap[indexNumber] = `rgb(${r},${g},${b})`;
-    }
-}
-
-altitudeImage.onload = () => { // This should be covered by Terrain module
-
-    const canvas = new OffscreenCanvas(1024, 1024);
-    const ctx = canvas.getContext("2d");
-
-    ctx.drawImage(altitudeImage, 0, 0);
-    const imageData = ctx.getImageData(0, 0, 1024, 1024).data;
-
-    for (let i = 0; i < imageData.length; i += 4) {
-
-        let indexNumber = Math.floor (i / 4);
-        let r = imageData[i]; 
-
-        terrain.altitudeMap[indexNumber] = r;
-    }
-}
+altitudeImage.onload = () => { terrain.loadAltitudeFromImage(altitudeImage); }
 
 setInterval(theatre.redraw, 10); // animate instead?
 

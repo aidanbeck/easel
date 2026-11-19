@@ -27,6 +27,38 @@ class Terrain {
         this.colorMap = [];
     }
 
+    loadAltitudeFromImage(image) {
+        const canvas = new OffscreenCanvas(this.width, this.height);
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, this.width, this.height).data;
+
+        for (let i = 0; i < imageData.length; i += 4) {
+
+            let indexNumber = Math.floor (i / 4); // images have r,g,b,a values, so the buffer is 4 times bigger
+            this.altitudeMap[indexNumber] = imageData[i]; 
+        }
+    }
+
+    loadColorFromImage(image) {
+        const canvas = new OffscreenCanvas(this.width, this.height);
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, this.width, this.height).data;
+
+        for (let i = 0; i < imageData.length; i++) {
+
+            let r = imageData[i]; i++;
+            let g = imageData[i]; i++;
+            let b = imageData[i]; i++;   
+
+            let indexNumber = Math.floor (i / 4);
+            this.colorMap[indexNumber] = `rgb(${r},${g},${b})`;
+        }
+    }
+
     getPointIndex(x, y) {
         return y * this.width + x;
     }
