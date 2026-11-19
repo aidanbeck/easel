@@ -44,7 +44,7 @@ input.onkeyup = (event) => {
 // Custom Handlers
 messenger.connectionHandler = () => messenger.sendMessage({ type: "joinMessage", sessionId: messenger.sessionId, username: username });
 messenger.disconnectionHandler = () => printMessage("Disconnected from server. Refresh to reconnect.");
-messenger.addHandler("chatMessage", (data) => printMessage(`<${data.username}>: ${data.chatContent}`) );
+messenger.addHandler("chatMessage", (data) => printMessage(`<${data.username}> ${data.chatContent}`) );
 messenger.addHandler("joinMessage", (data) => printMessage(`${data.username} joined the chat.`) );
 
 globalThis.MESSENGER = messenger;
