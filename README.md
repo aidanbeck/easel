@@ -1,14 +1,8 @@
 **A library for highly interactive JavaScript applications.**
-
-[Easel v0.1 GitHub (In Development)](https://github.com/aidanbeck/easel/tree/v0.1)
-
-
-```
-This is my continually changing compilation of solutions designed to place nice with each other and speed up web development.
-Each module is a response to a common problem I've experienced, and an attempt at solving it generically enough to drag and drop wherever.
-
-v0.1 (shown here) is currently in development, and I intend to publish an NPM package once it is finished.
-```
+> This is my continually changing compilation of solutions designed to place nice with each other and speed up web development.
+> <br>Each module is a response to a common problem I've experienced, and an attempt at solving it generically enough to drag and drop wherever.
+> 
+> v0.1 (shown here) is currently in development, and I intend to publish an NPM package once it is finished. [Easel v0.1 GitHub](https://github.com/aidanbeck/easel/tree/v0.1)
 
 ## Example Programs
 | Program                          | Description                                                                  |
