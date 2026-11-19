@@ -9,11 +9,10 @@ import {Terrain, Camera} from '../src/Terrain.js';
 // Theatre Setup
 const canvasElement = document.getElementById("theatre");
 const theatre = new Theatre(canvasElement, 256, 256);
-// theatre.origin = "CENTER";
 theatre.makeFullScreen();
 theatre.shorterDimensionConsistent = true;
 theatre.canvas.style.backgroundColor = "rgb(150, 200, 255)";
-theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
+theatre.ctx.imageSmoothingEnabled = false;
 theatre.redraw = () => { render(false); }
 
 // Interaction
@@ -27,7 +26,8 @@ const controls = {
     lookRight: false,
     lookUp: false,
     lookDown: false,
-    build: false
+    build: false,
+    dig :false,
 }
 keyboard.bindValue('ArrowLeft',  v=> controls.lookLeft  =v);
 keyboard.bindValue('ArrowRight', v=> controls.lookRight =v);
@@ -38,6 +38,7 @@ keyboard.bindValue('d',          v=> controls.right     =v);
 keyboard.bindValue('w',          v=> controls.forward   =v);
 keyboard.bindValue('s',          v=> controls.backward  =v);
 keyboard.bindValue(' ',          v=> controls.build     =v);
+keyboard.bindValue('Shift',      v=> controls.dig       =v);
 
 // Game Loop
 setInterval(() => {
@@ -57,9 +58,12 @@ setInterval(() => {
     if (controls.lookRight) { camera.yaw   += 3; }
     if (controls.lookUp   ) { camera.pitch += 3; }
     if (controls.lookDown ) { camera.pitch -= 3; }
-    if (controls.build) {
-        const newAltitude = terrain.altitudeMap[mapIndex] + 1;
+    if (controls.build || controls.dig) {
+        
         const newColor = terrain.colorMap[terrain.colorMap.length - mapIndex];
+        let newAltitude = terrain.altitudeMap[mapIndex]
+        controls.build && newAltitude++;
+        controls.dig && newAltitude--;
 
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
@@ -73,15 +77,12 @@ setInterval(() => {
     
 }, 20);
 
-
 // Terrain
 const camera = new Camera(1024/2, 1024/2, 0, 50, 0, 90);
 const terrain = new Terrain(1024, 1024);
-
 const colorImage = new Image(); colorImage.src = './client-examples/media/C1W.png';
-colorImage.onload = () => { terrain.loadColorFromImage(colorImage, "color"); }
-
 const altitudeImage = new Image(); altitudeImage.src = './client-examples/media/D1.png';
+colorImage.onload    = () => { terrain.loadColorFromImage(colorImage); }
 altitudeImage.onload = () => { terrain.loadAltitudeFromImage(altitudeImage); }
 
 function render(callAnimationFrame = true) {
@@ -91,13 +92,8 @@ function render(callAnimationFrame = true) {
     theatre.ctx.fillStyle = "black";
     theatre.ctx.fillText("Move: WASD", 20, 20);
     theatre.ctx.fillText("Rotate: Arrow Keys", 20, 40);
+    theatre.ctx.fillText("Build/Dig: Space/Shift", 20, 60);
 
-    callAnimationFrame && requestAnimationFrame(render);
+    callAnimationFrame && requestAnimationFrame(render); // the conditional allows theatre.redraw to call without starting a new loop
 }
-
-render(); // start rendering
-
-// expose as global variables for console testing
-globalThis.THEATRE = theatre;
-globalThis.TERRAIN = terrain;
-globalThis.CAMERA = camera;
+render();
