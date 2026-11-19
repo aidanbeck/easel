@@ -14,14 +14,7 @@ theatre.makeFullScreen();
 theatre.shorterDimensionConsistent = true;
 theatre.canvas.style.backgroundColor = "rgb(150, 200, 255)";
 theatre.ctx.imageSmoothingEnabled = false; //prevent image blurring
-theatre.redraw = () => {
-    theatre.ctx.clearRect(0, 0, 1000, 1000);
-    terrain.drawRays(camera, theatre, 800, 1);
-
-    theatre.ctx.fillStyle = "black";
-    theatre.ctx.fillText("Move: WASD", 20, 20);
-    theatre.ctx.fillText("Rotate: Arrow Keys", 20, 40);
-};
+theatre.redraw = () => { render(false); }
 
 // Interaction
 const keyboard = new Keyboard();
@@ -91,7 +84,18 @@ colorImage.onload = () => { terrain.loadColorFromImage(colorImage, "color"); }
 const altitudeImage = new Image(); altitudeImage.src = './client-examples/media/D1.png';
 altitudeImage.onload = () => { terrain.loadAltitudeFromImage(altitudeImage); }
 
-setInterval(theatre.redraw, 10); // animate instead?
+function render(callAnimationFrame = true) {
+    theatre.ctx.clearRect(0, 0, 1000, 1000);
+    terrain.drawRays(camera, theatre, 800, 1);
+
+    theatre.ctx.fillStyle = "black";
+    theatre.ctx.fillText("Move: WASD", 20, 20);
+    theatre.ctx.fillText("Rotate: Arrow Keys", 20, 40);
+
+    callAnimationFrame && requestAnimationFrame(render);
+}
+
+render(); // start rendering
 
 // expose as global variables for console testing
 globalThis.THEATRE = theatre;
