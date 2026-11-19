@@ -5,6 +5,7 @@
 > v0.1 (shown here) is currently in development, and I intend to publish an NPM package once it is finished. [Easel v0.1 GitHub](https://github.com/aidanbeck/easel/tree/v0.1)
 
 ## Example Programs
+
 | Program                          | Description                                                                  |
 |----------------------------------|------------------------------------------------------------------------------|
 | [Sketchpad](demo.html?sketchpad) | a sketchpad program leveraging the **Theatre** module.                       |
@@ -18,6 +19,7 @@
 
 
 ## Easel Modules
+
 | Module        | Description                                                        |
 |---------------|--------------------------------------------------------------------|
 | Theatre       | Responsive pixel canvas.                                           |
