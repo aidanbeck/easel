@@ -24,6 +24,7 @@ theatre.redraw = () => {
 };
 
 // Interaction
+const keyboard = new Keyboard();
 const controls = {
     left: false,
     right: false,
@@ -35,34 +36,37 @@ const controls = {
     lookDown: false,
     build: false
 }
+keyboard.bindValue('ArrowLeft',  v=> controls.lookLeft  =v);
+keyboard.bindValue('ArrowRight', v=> controls.lookRight =v);
+keyboard.bindValue('ArrowUp',    v=> controls.lookUp    =v);
+keyboard.bindValue('ArrowDown',  v=> controls.lookDown  =v);
+keyboard.bindValue('a',          v=> controls.left      =v);
+keyboard.bindValue('d',          v=> controls.right     =v);
+keyboard.bindValue('w',          v=> controls.forward   =v);
+keyboard.bindValue('s',          v=> controls.backward  =v);
+keyboard.bindValue(' ',          v=> controls.build     =v);
 
-const keyboard = new Keyboard();
-keyboard.bindValue('ArrowLeft', v => controls.lookLeft = v);
-keyboard.bindValue('ArrowRight', v => controls.lookRight = v);
-keyboard.bindValue('ArrowUp', v => controls.lookUp = v);
-keyboard.bindValue('ArrowDown', v => controls.lookDown = v);
-keyboard.bindValue('a', v => controls.left = v);
-keyboard.bindValue('d', v => controls.right = v);
-keyboard.bindValue('w', v => controls.forward = v);
-keyboard.bindValue('s', v => controls.backward = v);
-keyboard.bindValue(' ', v => controls.build = v);
-
+// Game Loop
 setInterval(() => {
-    controls.left && camera.strafe(-1);
-    controls.right && camera.strafe(1);
-    controls.forward && camera.move(1);
+    
+    const x = Math.floor(camera.x);
+    const y = Math.floor(camera.y);
+    
+    const mapIndex = terrain.getPointIndex(x, y);
+    const minHeight = terrain.altitudeMap[mapIndex] + 20;
+    
+    controls.left     && camera.strafe(-1);
+    controls.right    && camera.strafe(1);
+    controls.forward  && camera.move(1);
     controls.backward && camera.move(-1);
     
-    if (controls.lookLeft) { camera.yaw -= 3; }
-    if (controls.lookRight) { camera.yaw += 3; }
-    if (controls.lookUp) { camera.pitch += 3; }
-    if (controls.lookDown) { camera.pitch -= 3; }
-
+    if (controls.lookLeft ) { camera.yaw   -= 3; }
+    if (controls.lookRight) { camera.yaw   += 3; }
+    if (controls.lookUp   ) { camera.pitch += 3; }
+    if (controls.lookDown ) { camera.pitch -= 3; }
     if (controls.build) {
-        const x = Math.floor(camera.x);
-        const y = Math.floor(camera.y);
-        const newAltitude = terrain.getPoint(x, y).altitude + 1;
-        const newColor = terrain.getPoint(1024 - x, 1024 - y).color;
+        const newAltitude = terrain.altitudeMap[mapIndex] + 1;
+        const newColor = terrain.colorMap[terrain.colorMap.length - mapIndex];
 
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
@@ -71,13 +75,8 @@ setInterval(() => {
         }
     }
     
-    const minHeight = terrain.getPoint(Math.floor(camera.x), Math.floor(camera.y)).altitude + 20;
-    
-    if (camera.z < minHeight) {
-        camera.z = minHeight;
-    } else if (camera.z > minHeight) {
-        camera.z--;
-    }
+    if (camera.z < minHeight) { camera.z = minHeight; } // stay above ground
+    else if (camera.z > minHeight) { camera.z--; } // gravity
     
 }, 20);
 
@@ -89,7 +88,7 @@ const terrain = new Terrain(1024, 1024);
 const colorImage = new Image(); colorImage.src = './client-examples/media/C1W.png';
 const altitudeImage = new Image(); altitudeImage.src = './client-examples/media/D1.png';
 
-colorImage.onload = () => {
+colorImage.onload = () => { // This should be covered by Terrain module
 
     const canvas = new OffscreenCanvas(1024, 1024);
     const ctx = canvas.getContext("2d");
@@ -109,7 +108,7 @@ colorImage.onload = () => {
     }
 }
 
-altitudeImage.onload = () => {
+altitudeImage.onload = () => { // This should be covered by Terrain module
 
     const canvas = new OffscreenCanvas(1024, 1024);
     const ctx = canvas.getContext("2d");
@@ -126,7 +125,7 @@ altitudeImage.onload = () => {
     }
 }
 
-setInterval(theatre.redraw, 10);
+setInterval(theatre.redraw, 10); // animate instead?
 
 // expose as global variables for console testing
 globalThis.THEATRE = theatre;
